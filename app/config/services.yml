@@ -4,6 +4,12 @@ parameters:
 #    parameter_name: value
 
 services:
+      api_exception_subscriber:
+            class: AppBundle\EventListener\ApiExceptionSubscriber
+            arguments: ["%kernel.debug%"]
+            tags:
+                - { name: kernel.event_subscriber }
+
       jwt_token_authenticator:
             class: AppBundle\Security\JwtTokenAuthenticator
             autowire: true
