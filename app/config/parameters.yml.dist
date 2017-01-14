@@ -18,3 +18,9 @@ parameters:
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
     jwt_key_pass_phrase: ~
+
+    aws_version: latest
+    aws_region: ap-southeast-2
+    aws_key: ~
+    aws_secret: ~
+    aws_sns_topic_arn: ~
