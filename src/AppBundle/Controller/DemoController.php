@@ -36,6 +36,7 @@ class DemoController extends Controller
             ]);
         } catch (SnsException $e) {
             dump($e->getMessage());
+            die;
         }
 
         return new Response('User Created Message Published');
