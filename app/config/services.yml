@@ -14,10 +14,14 @@ services:
             class: AppBundle\Security\JwtTokenAuthenticator
             autowire: true
 
-      aws_factory:
+      aws.factory:
             class: AppBundle\Service\AWSClientFactory
             arguments:
                 - "%aws_version%"
                 - "%aws_region%"
                 - "%aws_key%"
                 - "%aws_secret%"
+      aws.sns.helper:
+            class: AppBundle\Service\SNSHelper
+            arguments: ["@=service('aws.factory').createClient('sns')"]
+
