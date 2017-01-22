@@ -24,7 +24,7 @@ class DemoController extends Controller
             $em->persist($user);
             $em->flush();
 
-            $this->get('aws.sns.helper')->publish(
+            $this->get('aws.sns.client')->publish(
                 $this->get('jms_serializer')->serialize($user, 'json'),
                 $this->getParameter('aws_user_created_subject'),
                 $this->getParameter('aws_user_created_arn')

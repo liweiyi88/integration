@@ -25,3 +25,7 @@ services:
             class: AppBundle\Service\SNSHelper
             arguments: ["@=service('aws.factory').createClient('sns')"]
 
+      aws.sqs.helper:
+            class: AppBundle\Service\SQSHelper
+            arguments: ["@=service('aws.factory').createClient('sqs')"]
+
