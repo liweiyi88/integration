@@ -11,30 +11,37 @@ class ConfirmationEmailCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('confirm:email')
+            ->setName('sqs:confirm:email')
             ->setDescription('Process confirmation email');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-//        $confirmationQueueUrl = $this->getContainer()->getParameter('');
-//        $message = $this->getContainer()->get('aws.sqs.helper')->receiveMessage()
-//
-//        while (true) {
-//            $message = $queue->receive();
-//            if ($message) {
-//                try {
-//                    $message->process();
-//                    $queue->delete($message);
-//                } catch (Exception $e) {
-//                    $queue->release($message);
-//                    echo $e->getMessage();
-//                }
-//            } else {
-//                // Wait 20 seconds if no jobs in queue to minimise requests to AWS API
-//                sleep(20);
-//            }
-//        }
+        $client = $this->getContainer()->get('aws.sqs.helper');
+        $url = $client->getQueueUrl($this->getContainer()->getParameter('confirmation_queue'));
 
+        while (true) {
+            $result = $client->receiveMessage($url);
+            if (isset($result['Messages'])) {
+                try {
+                    $resultMessage = array_pop($result['Messages']);
+                    $receiptHandle = $resultMessage['ReceiptHandle'];
+                    $messageBody = $resultMessage['Body'];
+
+                    $messageJson = json_decode($messageBody, true);
+                    $message = json_decode($messageJson['Message'], true);
+
+                    //TODO
+                    //send email
+
+                    $client->deleteMessage($url, $receiptHandle);
+                } catch (\Exception $e) {
+                    echo $e->getMessage();
+                }
+            } else {
+                // Wait 20 seconds if no jobs in queue to minimise requests to AWS API
+                sleep(20);
+            }
+        }
     }
 }

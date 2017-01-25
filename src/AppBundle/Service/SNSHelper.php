@@ -27,8 +27,6 @@ class SNSHelper
             dump($e);
             //put exception into log or send email.
         }
-
-
     }
 
 }

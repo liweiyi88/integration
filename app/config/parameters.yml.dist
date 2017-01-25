@@ -29,6 +29,6 @@ parameters:
     aws_user_created_subject: ~
 
     #AWS SQS parameters
-    aws_confirmation_queue: ~
-    aws_mailchimp_queue: ~
+    confirmation_queue: ~
+    mailchimp_queue: ~
 

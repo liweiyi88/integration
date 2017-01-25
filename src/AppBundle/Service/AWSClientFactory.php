@@ -28,7 +28,7 @@ class AWSClientFactory
         ];
     }
 
-    public function createClient($clientType)
+    public function create($clientType)
     {
         if ($clientType == 'sns') {
             return new SnsClient($this->config);

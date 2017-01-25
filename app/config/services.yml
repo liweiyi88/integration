@@ -23,9 +23,9 @@ services:
                 - "%aws_secret%"
       aws.sns.helper:
             class: AppBundle\Service\SNSHelper
-            arguments: ["@=service('aws.factory').createClient('sns')"]
+            arguments: ["@=service('aws.factory').create('sns')"]
 
       aws.sqs.helper:
             class: AppBundle\Service\SQSHelper
-            arguments: ["@=service('aws.factory').createClient('sqs')"]
+            arguments: ["@=service('aws.factory').create('sqs')"]
 
