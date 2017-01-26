@@ -11,7 +11,7 @@ class MailchimpOptInCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('mailchimp:opt:in')
+            ->setName('sqs:mailchimp')
             ->setDescription('integrate with Mailchimp');
     }
 
@@ -30,10 +30,14 @@ class MailchimpOptInCommand extends ContainerAwareCommand
 
                     $messageJson = json_decode($messageBody, true);
                     $message = json_decode($messageJson['Message'], true);
+                    $emailBody = \Swift_Message::newInstance()
+                        ->setSubject('Mailchimp Integration')
+                        ->setFrom('weiyi.li713@gmail.com')
+                        ->setTo($message['email'])
+                        ->setBody('Your information have been pushed to Mailchimp!');
 
-                    //TODO
-                    //send email
-
+                    ;
+                    $this->getContainer()->get('mailer')->send($emailBody);
                     $client->deleteMessage($url, $receiptHandle);
                 } catch (\Exception $e) {
                     echo $e->getMessage();

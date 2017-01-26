@@ -1,5 +1,5 @@
 <?php
-namespace AppBundle\Service;
+namespace AppBundle\Service\Aws;
 
 use Aws\Sns\SnsClient;
 use Aws\Sqs\SqsClient;

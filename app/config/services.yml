@@ -15,17 +15,17 @@ services:
             autowire: true
 
       aws.factory:
-            class: AppBundle\Service\AWSClientFactory
+            class: AppBundle\Service\Aws\AWSClientFactory
             arguments:
                 - "%aws_version%"
                 - "%aws_region%"
                 - "%aws_key%"
                 - "%aws_secret%"
       aws.sns.helper:
-            class: AppBundle\Service\SNSHelper
+            class: AppBundle\Service\Aws\SNSHelper
             arguments: ["@=service('aws.factory').create('sns')"]
 
       aws.sqs.helper:
-            class: AppBundle\Service\SQSHelper
+            class: AppBundle\Service\Aws\SQSHelper
             arguments: ["@=service('aws.factory').create('sqs')"]
 

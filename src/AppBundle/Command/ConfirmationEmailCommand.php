@@ -31,9 +31,14 @@ class ConfirmationEmailCommand extends ContainerAwareCommand
                     $messageJson = json_decode($messageBody, true);
                     $message = json_decode($messageJson['Message'], true);
 
-                    //TODO
-                    //send email
+                    $emailBody = \Swift_Message::newInstance()
+                        ->setSubject('Email Confirmation')
+                        ->setFrom('weiyi.li713@gmail.com')
+                        ->setTo($message['email'])
+                        ->setBody('Your application has been confirmed! Thanks for the registration');
 
+                    ;
+                    $this->getContainer()->get('mailer')->send($emailBody);
                     $client->deleteMessage($url, $receiptHandle);
                 } catch (\Exception $e) {
                     echo $e->getMessage();
