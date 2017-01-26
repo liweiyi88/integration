@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Api;
+
 use Symfony\Component\HttpFoundation\Response;
 
 /**

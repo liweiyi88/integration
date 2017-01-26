@@ -40,7 +40,6 @@ class JwtTokenAuthenticator extends AbstractGuardAuthenticator
         }
 
         return $token;
-
     }
 
     public function getUser($credentials, UserProviderInterface $userProvider)
@@ -70,12 +69,10 @@ class JwtTokenAuthenticator extends AbstractGuardAuthenticator
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-
     }
 
     public function supportsRememberMe()

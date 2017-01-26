@@ -1,7 +1,6 @@
 <?php
 namespace AppBundle\Service\Aws;
 
-
 use Aws\Sns\Exception\SnsException;
 use Aws\Sns\SnsClient;
 
@@ -22,11 +21,9 @@ class SNSHelper
                 'Subject' => $subject,
                 'TopicArn' => $arn
             ]);
-
         } catch (SnsException $e) {
             dump($e);
             //put exception into log or send email.
         }
     }
-
 }

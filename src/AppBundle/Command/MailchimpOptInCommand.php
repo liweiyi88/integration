@@ -21,9 +21,9 @@ class MailchimpOptInCommand extends ContainerAwareCommand
         $url = $client->getQueueUrl($this->getContainer()->getParameter('mailchimp_queue'));
 
         while (true) {
-            $result = $client->receiveMessage($url);
-            if (isset($result['Messages'])) {
-                try {
+            try {
+                $result = $client->receiveMessage($url);
+                if (isset($result['Messages'])) {
                     $resultMessage = array_pop($result['Messages']);
                     $receiptHandle = $resultMessage['ReceiptHandle'];
                     $messageBody = $resultMessage['Body'];
@@ -35,16 +35,16 @@ class MailchimpOptInCommand extends ContainerAwareCommand
                         ->setFrom('weiyi.li713@gmail.com')
                         ->setTo($message['email'])
                         ->setBody('Your information have been pushed to Mailchimp!');
-
                     ;
                     $this->getContainer()->get('mailer')->send($emailBody);
+
                     $client->deleteMessage($url, $receiptHandle);
-                } catch (\Exception $e) {
-                    echo $e->getMessage();
+                } else {
+                    // Wait 20 seconds if no jobs in queue to minimise requests to AWS API
+                    sleep(20);
                 }
-            } else {
-                // Wait 20 seconds if no jobs in queue to minimise requests to AWS API
-                sleep(20);
+            } catch (\Exception $e) {
+                echo $e->getMessage();
             }
         }
     }
