@@ -4,6 +4,7 @@ namespace AppBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class MailchimpOptInCommand extends ContainerAwareCommand
@@ -12,6 +13,7 @@ class MailchimpOptInCommand extends ContainerAwareCommand
     {
         $this
             ->setName('sqs:mailchimp')
+            ->addOption('sleep', null, InputOption::VALUE_REQUIRED, null, 20)
             ->setDescription('integrate with Mailchimp');
     }
 
@@ -19,29 +21,31 @@ class MailchimpOptInCommand extends ContainerAwareCommand
     {
         $client = $this->getContainer()->get('aws.sqs.helper');
         $url = $client->getQueueUrl($this->getContainer()->getParameter('mailchimp_queue'));
+        $sleepTime = intval($input->getOption('sleep'));
 
         while (true) {
             try {
                 $result = $client->receiveMessage($url);
-                if (isset($result['Messages'])) {
-                    $resultMessage = array_pop($result['Messages']);
-                    $receiptHandle = $resultMessage['ReceiptHandle'];
-                    $messageBody = $resultMessage['Body'];
+                if ($result->get('Messages')) {
+                    foreach ($result->get('Messages') as $message) {
+                        $receiptHandle = $message['ReceiptHandle'];
+                        $messageBody = $message['Body'];
+                        $messageJson = json_decode($messageBody, true);
+                        $user = json_decode($messageJson['Message'], true);
 
-                    $messageJson = json_decode($messageBody, true);
-                    $message = json_decode($messageJson['Message'], true);
-                    $emailBody = \Swift_Message::newInstance()
-                        ->setSubject('Mailchimp Integration')
-                        ->setFrom('weiyi.li713@gmail.com')
-                        ->setTo($message['email'])
-                        ->setBody('Your information have been pushed to Mailchimp!');
-                    ;
-                    $this->getContainer()->get('mailer')->send($emailBody);
+                        $emailBody = \Swift_Message::newInstance()
+                            ->setSubject('Mailchimp Integration')
+                            ->setFrom('weiyi.li713@gmail.com')
+                            ->setTo($user['email'])
+                            ->setBody('Your information have been pushed to Mailchimp!');
 
-                    $client->deleteMessage($url, $receiptHandle);
+                        ;
+                        $this->getContainer()->get('mailer')->send($emailBody);
+
+                        $client->deleteMessage($url, $receiptHandle);
+                    }
                 } else {
-                    // Wait 20 seconds if no jobs in queue to minimise requests to AWS API
-                    sleep(20);
+                    sleep($sleepTime);
                 }
             } catch (\Exception $e) {
                 echo $e->getMessage();
