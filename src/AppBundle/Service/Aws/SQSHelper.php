@@ -21,10 +21,12 @@ class SQSHelper
         return $result->get('QueueUrl');
     }
 
-    public function receiveMessage($queueUrl)
+    public function receiveMessage($queueUrl, $maxNumberOfMessages = 1, $waitTimeSeconds = 0)
     {
         return $this->client->receiveMessage([
-            'QueueUrl' => $queueUrl
+            'QueueUrl' => $queueUrl,
+            'MaxNumberOfMessages' => $maxNumberOfMessages,
+            'WaitTimeSeconds' => $waitTimeSeconds
         ]);
     }
 

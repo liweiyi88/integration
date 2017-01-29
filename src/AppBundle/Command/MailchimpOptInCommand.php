@@ -14,6 +14,8 @@ class MailchimpOptInCommand extends ContainerAwareCommand
         $this
             ->setName('sqs:mailchimp')
             ->addOption('sleep', null, InputOption::VALUE_REQUIRED, null, 20)
+            ->addOption('max_number_messages', null, InputOption::VALUE_REQUIRED, null, 1)
+            ->addOption('wait_time_seconds', null, InputOption::VALUE_REQUIRED, null, 0)
             ->setDescription('integrate with Mailchimp');
     }
 
@@ -21,11 +23,13 @@ class MailchimpOptInCommand extends ContainerAwareCommand
     {
         $client = $this->getContainer()->get('aws.sqs.helper');
         $url = $client->getQueueUrl($this->getContainer()->getParameter('mailchimp_queue'));
+        $maxNumberOfMessages = intval($input->getOption('max_number_messages'));
+        $waitTimeSeconds = intval($input->getOption('wait_time_seconds'));
         $sleepTime = intval($input->getOption('sleep'));
 
         while (true) {
             try {
-                $result = $client->receiveMessage($url);
+                $result = $client->receiveMessage($url, $maxNumberOfMessages, $waitTimeSeconds);
                 if ($result->get('Messages')) {
                     foreach ($result->get('Messages') as $message) {
                         $receiptHandle = $message['ReceiptHandle'];
