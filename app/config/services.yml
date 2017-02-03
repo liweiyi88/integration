@@ -29,3 +29,10 @@ services:
             class: AppBundle\Service\Aws\SQSHelper
             arguments: ["@=service('aws.factory').create('sqs')"]
 
+      confirmation.email.processor:
+            class: AppBundle\Messaging\ConfirmationEmailProcessor
+            arguments: ['@mailer']
+
+      mailchimp.processor:
+            class: AppBundle\Messaging\MailchimpProcessor
+            arguments: ['@mailer']
