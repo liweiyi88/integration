@@ -1,0 +1,24 @@
+stages:
+  - build
+  - test
+  - deploy
+
+build:
+  script:
+    - composer install
+    - bin/console cache:clear
+  stage: build
+  only:
+    - master
+  allow_failure: false
+
+deploy_production:
+  script:
+    - cap production deploy --trace
+  stage: deploy
+  environment:
+    name: production
+    url: http://demo.escapestring.com
+  only:
+    - master
+  allow_failure: false
