@@ -16,9 +16,6 @@ deploy_production:
   script:
     - cap production deploy --trace
   stage: deploy
-  environment:
-    name: production
-    url: http://demo.escapestring.com
   only:
     - master
   allow_failure: false
