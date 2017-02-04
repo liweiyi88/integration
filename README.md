@@ -1,4 +1,4 @@
-integration Sample Project
+Integration Sample Project
 ===============
 
 A sample project which implements Message/Event Driven approach.
