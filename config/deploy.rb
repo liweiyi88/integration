@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock "3.6.1"
+lock "3.7.2"
 
 set :application, "integration-demo"
 set :repo_url, "git@gitlab.com:julianlol/integration-sample.git"
