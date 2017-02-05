@@ -31,7 +31,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  capistrano (~> 3.4)
+  capistrano (~> 3.7)
   capistrano-symfony (~> 1.0.0.rc1)
 
 BUNDLED WITH
