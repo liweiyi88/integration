@@ -38,7 +38,7 @@ class WorkerCommand extends ContainerAwareCommand
                     sleep($sleepTime);
                 }
             } catch (\Exception $e) {
-                echo $e->getMessage();
+                $this->getContainer()->get('logger')->error($e->getMessage());
             }
         }
     }
