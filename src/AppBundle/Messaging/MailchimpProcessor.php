@@ -18,7 +18,7 @@ class MailchimpProcessor implements MessageProcessInterface
 
             $emailBody = \Swift_Message::newInstance()
                 ->setSubject('Email Confirmation')
-                ->setFrom('weiyi.li713@gmail.com')
+                ->setFrom('mailerweiyi@gmail.com')
                 ->setTo($user['email'])
                 ->setBody('Your information have been pushed to Mailchimp');
 
