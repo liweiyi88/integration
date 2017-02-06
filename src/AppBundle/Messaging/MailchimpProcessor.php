@@ -5,7 +5,7 @@ class MailchimpProcessor implements MessageProcessInterface
 {
     private $mailer;
 
-    public function __construct($mailer)
+    public function __construct(\Swift_Mailer $mailer)
     {
         $this->mailer = $mailer;
     }
@@ -22,7 +22,9 @@ class MailchimpProcessor implements MessageProcessInterface
                 ->setTo($user['email'])
                 ->setBody('Your information have been pushed to Mailchimp');
 
+            $this->mailer->getTransport()->start();
             $this->mailer->send($emailBody);
+            $this->mailer->getTransport()->stop();
         }
     }
 }

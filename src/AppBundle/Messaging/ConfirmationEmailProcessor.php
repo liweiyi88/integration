@@ -5,7 +5,7 @@ class ConfirmationEmailProcessor implements MessageProcessInterface
 {
     private $mailer;
 
-    public function __construct($mailer)
+    public function __construct(\Swift_Mailer $mailer)
     {
         $this->mailer = $mailer;
     }
@@ -22,7 +22,9 @@ class ConfirmationEmailProcessor implements MessageProcessInterface
                 ->setTo($user['email'])
                 ->setBody('Your account has been confirmed');
 
+            $this->mailer->getTransport()->start();
             $this->mailer->send($emailBody);
+            $this->mailer->getTransport()->stop();
         }
     }
 }
