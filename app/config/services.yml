@@ -37,6 +37,6 @@ services:
             class: AppBundle\Messaging\MailchimpProcessor
             arguments: ['@mailer']
 
-      messager:
-            class: AppBundle\Service\Messager
+      messenger:
+            class: AppBundle\Service\Messenger
             arguments: ['@aws.sqs.helper']

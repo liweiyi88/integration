@@ -33,7 +33,7 @@ class WorkerCommand extends ContainerAwareCommand
                 $result = $client->receiveMessage($url, $maxNumberOfMessages, $waitTimeSeconds);
                 if ($result->get('Messages')) {
                     $processor = $this->createProcessor($processorName);
-                    $this->getContainer()->get('messager')->send($processor, $url, $result->get('Messages'));
+                    $this->getContainer()->get('messenger')->send($processor, $url, $result->get('Messages'));
                 } else {
                     sleep($sleepTime);
                 }
