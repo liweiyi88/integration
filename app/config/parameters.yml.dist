@@ -33,3 +33,5 @@ parameters:
     confirmation_queue: ~
     mailchimp_queue: ~
 
+    redis_dsn: redis://localhost:6379
+
