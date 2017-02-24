@@ -54,9 +54,9 @@ class WorkerCommand extends ContainerAwareCommand
     private function createProcessor($name)
     {
         if ($name == 'confirmation_email') {
-            return $this->getContainer()->get('confirmation.email.processor');
+            return $this->getContainer()->get('processor.confirmation.email');
         } elseif ($name == 'mailchimp') {
-            return $this->getContainer()->get('mailchimp.processor');
+            return $this->getContainer()->get('processor.mailchimp');
         }
 
         throw new \InvalidArgumentException('no such a processor');

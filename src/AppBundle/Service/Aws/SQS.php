@@ -3,7 +3,7 @@ namespace AppBundle\Service\Aws;
 
 use Aws\Sqs\SqsClient;
 
-class SQSHelper
+class SQS
 {
     private $client;
 
