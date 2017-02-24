@@ -12,14 +12,6 @@ security:
             entity: { class: AppBundle:User }
 
     firewalls:
-        api:
-            pattern: ^/api/
-            anonymous: true
-            stateless: true
-            guard:
-                authenticators:
-                    - 'jwt_token_authenticator'
-
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/

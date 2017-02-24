@@ -94,5 +94,7 @@ class WorkerCommand extends ContainerAwareCommand
         if ($cache) {
             return $cache->getItem('last_restart_date')->get();
         }
+
+        return null;
     }
 }
