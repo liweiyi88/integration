@@ -2,6 +2,7 @@
 namespace AppBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Cache\Adapter\AbstractAdapter;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -15,6 +16,7 @@ class WorkerCommand extends ContainerAwareCommand
             ->setName('sqs:process')
             ->addOption('sleep', null, InputOption::VALUE_REQUIRED, null, 5)
             ->addOption('processor', null, InputOption::VALUE_REQUIRED, null, null)
+            ->addOption('cache_driver', null, InputOption::VALUE_REQUIRED, null, null)
             ->addOption('max_number_messages', null, InputOption::VALUE_REQUIRED, null, 10)
             ->addOption('wait_time_seconds', null, InputOption::VALUE_REQUIRED, null, 20)
             ->setDescription('Process AWS SQS messages');
@@ -27,11 +29,10 @@ class WorkerCommand extends ContainerAwareCommand
         $waitTimeSeconds = intval($input->getOption('wait_time_seconds'));
         $sleepTime = intval($input->getOption('sleep'));
         $processorName = $input->getOption('processor');
+        $cacheDriver = $input->getOption('cache_driver');
+
+        $cache = $this->getCache($cacheDriver);
         $url = $client->getQueueUrl($this->getQueueName($processorName));
-
-        $redisConnection = RedisAdapter::createConnection($this->getContainer()->getParameter('redis_dsn'));
-        $cache = new RedisAdapter($redisConnection);
-
         $lastRestart = $cache->getItem('last_restart_date')->get();
 
         while (true) {
@@ -62,6 +63,16 @@ class WorkerCommand extends ContainerAwareCommand
         throw new \InvalidArgumentException('no such a processor');
     }
 
+    private function getCache($name)
+    {
+        if ($name == 'redis') {
+            $connection =  RedisAdapter::createConnection($this->getContainer()->getParameter('redis_dsn'));
+            return new RedisAdapter($connection);
+        }
+
+        throw new \InvalidArgumentException('no such a cache connection');
+    }
+
     private function getQueueName($name)
     {
         if ($name == 'confirmation_email') {
@@ -89,7 +100,7 @@ class WorkerCommand extends ContainerAwareCommand
         return $this->getTimestampOfLastQueueRestart($cache) != $lastRestart;
     }
 
-    protected function getTimestampOfLastQueueRestart(RedisAdapter $cache)
+    protected function getTimestampOfLastQueueRestart(AbstractAdapter $cache)
     {
         if ($cache) {
             return $cache->getItem('last_restart_date')->get();
