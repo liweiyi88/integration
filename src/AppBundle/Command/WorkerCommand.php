@@ -6,7 +6,6 @@ use Symfony\Component\Cache\Adapter\AbstractAdapter;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Cache\Adapter\RedisAdapter;
 
 class WorkerCommand extends ContainerAwareCommand
 {
@@ -16,7 +15,7 @@ class WorkerCommand extends ContainerAwareCommand
             ->setName('sqs:process')
             ->addOption('sleep', null, InputOption::VALUE_REQUIRED, null, 5)
             ->addOption('processor', null, InputOption::VALUE_REQUIRED, null, null)
-            ->addOption('cache_driver', null, InputOption::VALUE_REQUIRED, null, null)
+            ->addOption('cache', null, InputOption::VALUE_REQUIRED, null, null)
             ->addOption('max_number_messages', null, InputOption::VALUE_REQUIRED, null, 10)
             ->addOption('wait_time_seconds', null, InputOption::VALUE_REQUIRED, null, 20)
             ->setDescription('Process AWS SQS messages');
@@ -29,9 +28,8 @@ class WorkerCommand extends ContainerAwareCommand
         $waitTimeSeconds = intval($input->getOption('wait_time_seconds'));
         $sleepTime = intval($input->getOption('sleep'));
         $processorName = $input->getOption('processor');
-        $cacheDriver = $input->getOption('cache_driver');
 
-        $cache = $this->getCache($cacheDriver);
+        $cache = $this->getContainer()->get('cache.factory')->getCache($input->getOption('cache'));
         $url = $client->getQueueUrl($this->getQueueName($processorName));
         $lastRestart = $cache->getItem('last_restart_date')->get();
 
@@ -62,16 +60,6 @@ class WorkerCommand extends ContainerAwareCommand
         }
 
         throw new \InvalidArgumentException('Unsupported Processor');
-    }
-
-    private function getCache($name)
-    {
-        switch ($name) {
-            case 'redis':
-                return new RedisAdapter(RedisAdapter::createConnection($this->getContainer()->getParameter('redis_dsn')));
-        }
-
-        throw new \InvalidArgumentException('no such a cache connection');
     }
 
     private function getQueueName($name)

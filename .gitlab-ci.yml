@@ -1,7 +1,7 @@
-stages:
-  - build
-  - test
-  - deploy
+#stages:
+#  - build
+#  - test
+#  - deploy
 
 #build:
 #  script:

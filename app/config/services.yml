@@ -30,3 +30,6 @@ services:
       messenger:
             class: AppBundle\Service\Messenger
             arguments: ['@aws.sqs.helper']
+
+      cache.factory:
+            class: AppBundle\Service\CacheFactory
