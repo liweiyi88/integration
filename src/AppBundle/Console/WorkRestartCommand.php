@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Command;
+namespace AppBundle\Console;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,7 +19,7 @@ class WorkRestartCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $cache = $this->getContainer()->get('cache.factory')->getCache($input->getOption('cache'));
+        $cache = $this->getContainer()->get('cache.factory')->get($input->getOption('cache'));
         $lastRestartDateItem = $cache->getItem('last_restart_date');
         $cache->save($lastRestartDateItem->set(date('Y-m-d H:i:s')));
     }

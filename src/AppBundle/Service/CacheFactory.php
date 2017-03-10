@@ -6,12 +6,12 @@ use Symfony\Component\Cache\Adapter\AbstractAdapter;
 class CacheFactory
 {
     /**
-     * @param $name
+     * @param $cache
      * @return AbstractAdapter
      */
-    public function getCache($name)
+    public function get($cache)
     {
-        switch ($name) {
+        switch ($cache) {
             case 'redis':
                 return new RedisAdapter(RedisAdapter::createConnection($this->getContainer()->getParameter('redis_dsn')));
         }

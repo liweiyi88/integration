@@ -4,7 +4,7 @@ namespace AppBundle\Service;
 use AppBundle\Messaging\MessageProcessInterface;
 use AppBundle\Service\Aws\SQS;
 
-class Messenger
+class MessageHandler
 {
     private $client;
 
@@ -13,7 +13,12 @@ class Messenger
         $this->client = $client;
     }
 
-    public function send(MessageProcessInterface $processor, $queueUrl, $messages = array())
+    /**
+     * @param MessageProcessInterface $processor
+     * @param string                  $queueUrl
+     * @param array                   $messages
+     */
+    public function handle(MessageProcessInterface $processor, $queueUrl, $messages = array())
     {
         foreach ($messages as $message) {
             $processor->process($message);

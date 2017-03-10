@@ -1,8 +1,7 @@
 <?php
-namespace AppBundle\Command;
+namespace AppBundle\Console;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Cache\Adapter\AbstractAdapter;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -12,7 +11,8 @@ class WorkerCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('sqs:process')
+            ->setName('process:queue')
+            ->addOption('max_memory', null, InputOption::VALUE_REQUIRED, null, 128)
             ->addOption('sleep', null, InputOption::VALUE_REQUIRED, null, 5)
             ->addOption('processor', null, InputOption::VALUE_REQUIRED, null, null)
             ->addOption('cache', null, InputOption::VALUE_REQUIRED, null, null)
@@ -26,42 +26,37 @@ class WorkerCommand extends ContainerAwareCommand
         $client = $this->getContainer()->get('aws.sqs.helper');
         $maxNumberOfMessages = intval($input->getOption('max_number_messages'));
         $waitTimeSeconds = intval($input->getOption('wait_time_seconds'));
-        $sleepTime = intval($input->getOption('sleep'));
+        $sleepSeconds = intval($input->getOption('sleep'));
         $processorName = $input->getOption('processor');
 
-        $cache = $this->getContainer()->get('cache.factory')->getCache($input->getOption('cache'));
-        $url = $client->getQueueUrl($this->getQueueName($processorName));
+        $worker = $this->getContainer()->get('worker');
+        $cache = $this->getContainer()->get('cache.factory')->get($input->getOption('cache'));
+        $worker->setCache($cache);
+
         $lastRestart = $cache->getItem('last_restart_date')->get();
+        $url = $client->getQueueUrl($this->getQueueName($processorName));
 
         while (true) {
             try {
                 $result = $client->receiveMessage($url, $maxNumberOfMessages, $waitTimeSeconds);
                 if ($result->get('Messages')) {
-                    $processor = $this->createProcessor($processorName);
-                    $this->getContainer()->get('messenger')->send($processor, $url, $result->get('Messages'));
+                    $processor = $this->getContainer()->get('processor.factory')->get($processorName);
+                    $this->getContainer()->get('message.handler')->handle($processor, $url, $result->get('Messages'));
                 } else {
-                    sleep($sleepTime);
+                    $worker->sleep($sleepSeconds);
                 }
 
-                $this->stopIfNecessary($lastRestart, $cache);
+                $worker->stopIfNecessary(intval($input->getOption('max_memory')), $lastRestart);
             } catch (\Exception $e) {
                 $this->getContainer()->get('logger')->error($e->getMessage());
             }
         }
     }
 
-    private function createProcessor($name)
-    {
-        switch ($name) {
-            case 'confirmation_email':
-                return $this->getContainer()->get('processor.confirmation.email');
-            case 'mailchimp':
-                return $this->getContainer()->get('processor.mailchimp');
-        }
-
-        throw new \InvalidArgumentException('Unsupported Processor');
-    }
-
+    /**
+     * @param string $name
+     * @return mixed
+     */
     private function getQueueName($name)
     {
         switch ($name) {
@@ -72,31 +67,5 @@ class WorkerCommand extends ContainerAwareCommand
         }
 
         throw new \InvalidArgumentException('Unsupported Queue');
-    }
-
-    protected function stopIfNecessary($lastRestart, $cache)
-    {
-        if ($this->queueShouldRestart($lastRestart, $cache)) {
-            $this->stop();
-        }
-    }
-
-    private function stop($status = 0)
-    {
-        exit($status);
-    }
-
-    protected function queueShouldRestart($lastRestart, $cache)
-    {
-        return $this->getTimestampOfLastQueueRestart($cache) != $lastRestart;
-    }
-
-    protected function getTimestampOfLastQueueRestart(AbstractAdapter $cache)
-    {
-        if ($cache) {
-            return $cache->getItem('last_restart_date')->get();
-        }
-
-        return null;
     }
 }

@@ -27,9 +27,15 @@ services:
             class: AppBundle\Messaging\MailchimpProcessor
             arguments: ['@mailer']
 
-      messenger:
-            class: AppBundle\Service\Messenger
+      message.handler:
+            class: AppBundle\Service\MessageHandler
             arguments: ['@aws.sqs.helper']
 
       cache.factory:
             class: AppBundle\Service\CacheFactory
+
+      processor.factory:
+            class: AppBundle\Service\ProcessorFactory
+
+      worker:
+            class: AppBundle\Service\Worker
