@@ -54,20 +54,21 @@ class WorkerCommand extends ContainerAwareCommand
 
     private function createProcessor($name)
     {
-        if ($name == 'confirmation_email') {
-            return $this->getContainer()->get('processor.confirmation.email');
-        } elseif ($name == 'mailchimp') {
-            return $this->getContainer()->get('processor.mailchimp');
+        switch ($name) {
+            case 'confirmation_email':
+                return $this->getContainer()->get('processor.confirmation.email');
+            case 'mailchimp':
+                return $this->getContainer()->get('processor.mailchimp');
         }
 
-        throw new \InvalidArgumentException('no such a processor');
+        throw new \InvalidArgumentException('Unsupported Processor');
     }
 
     private function getCache($name)
     {
-        if ($name == 'redis') {
-            $connection =  RedisAdapter::createConnection($this->getContainer()->getParameter('redis_dsn'));
-            return new RedisAdapter($connection);
+        switch ($name) {
+            case 'redis':
+                return new RedisAdapter(RedisAdapter::createConnection($this->getContainer()->getParameter('redis_dsn')));
         }
 
         throw new \InvalidArgumentException('no such a cache connection');
@@ -75,12 +76,14 @@ class WorkerCommand extends ContainerAwareCommand
 
     private function getQueueName($name)
     {
-        if ($name == 'confirmation_email') {
-            return $this->getContainer()->getParameter('confirmation_queue');
-        } elseif ($name == 'mailchimp') {
-            return $this->getContainer()->getParameter('mailchimp_queue');
+        switch ($name) {
+            case 'confirmation_email':
+                return $this->getContainer()->getParameter('confirmation_queue');
+            case 'mailchimp':
+                return  $this->getContainer()->getParameter('mailchimp_queue');
         }
-        throw new \InvalidArgumentException('no such a processor');
+
+        throw new \InvalidArgumentException('Unsupported Queue');
     }
 
     protected function stopIfNecessary($lastRestart, $cache)
