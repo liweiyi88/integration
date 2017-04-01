@@ -1,8 +1,9 @@
 <?php
 namespace AppBundle\Messaging;
 
-class MailchimpProcessor implements MessageProcessInterface
+class ConfirmationEmail implements MessageHandler
 {
+    const ALIAS = 'confirmation_email';
     private $mailer;
 
     public function __construct(\Swift_Mailer $mailer)
@@ -10,7 +11,7 @@ class MailchimpProcessor implements MessageProcessInterface
         $this->mailer = $mailer;
     }
 
-    public function process($message = null)
+    public function handle($message)
     {
         if ($message != null) {
             $messageJson = json_decode($message['Body'], true);
@@ -20,7 +21,7 @@ class MailchimpProcessor implements MessageProcessInterface
                 ->setSubject('Email Confirmation')
                 ->setFrom('mailerweiyi@gmail.com')
                 ->setTo($user['email'])
-                ->setBody('Your information have been pushed to Mailchimp');
+                ->setBody('Your account has been confirmed');
 
             $this->mailer->getTransport()->start();
             $this->mailer->send($emailBody);

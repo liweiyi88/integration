@@ -19,23 +19,20 @@ services:
             class: AppBundle\Service\Aws\SQS
             arguments: ["@=service('aws.factory').create('sqs')"]
 
-      processor.confirmation.email:
-            class: AppBundle\Messaging\ConfirmationEmailProcessor
+      confirmation.email:
+            class: AppBundle\Messaging\ConfirmationEmail
             arguments: ['@mailer']
 
-      processor.mailchimp:
-            class: AppBundle\Messaging\MailchimpProcessor
+      mailchimp:
+            class: AppBundle\Messaging\Mailchimp
             arguments: ['@mailer']
-
-      message.handler:
-            class: AppBundle\Service\MessageHandler
-            arguments: ['@aws.sqs.helper']
 
       cache.factory:
             class: AppBundle\Service\CacheFactory
 
-      processor.factory:
-            class: AppBundle\Service\ProcessorFactory
+      message.handler.factory:
+            class: AppBundle\Service\MessageHandlerFactory
+            arguments: ['@confirmation.email', '@mailchimp']
 
       worker:
             class: AppBundle\Service\Worker
