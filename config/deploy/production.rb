@@ -49,7 +49,7 @@
 #
 # The server-based syntax can be used to override options:
 # ------------------------------------
-server 'ec2-54-66-152-126.ap-southeast-2.compute.amazonaws.com',
+server 'escapestring.com',
    user: 'deployer',
    roles: %w{web app},
    ssh_options: {
