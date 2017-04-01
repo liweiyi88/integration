@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock "3.7.2"
+lock "3.8.0"
 
 set :application, "integration-demo"
 set :repo_url, "git@gitlab.com:julianlol/integration-sample.git"
@@ -9,7 +9,7 @@ set :branch, "master"
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, "/var/www/html/gitlab-demo"
+set :deploy_to, "/home/escape/escape"
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh

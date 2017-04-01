@@ -21,8 +21,6 @@
 # role :web, %w{user1@primary.com user2@additional.com}, other_property: :other_value
 # role :db,  %w{deploy@example.com}
 
-
-
 # Configuration
 # =============
 # You can set any configuration variable like in config/deploy.rb
@@ -50,11 +48,10 @@
 # The server-based syntax can be used to override options:
 # ------------------------------------
 server 'escapestring.com',
-   user: 'deployer',
+   user: 'escape',
    roles: %w{web app},
    ssh_options: {
-     user: 'deployer', # overrides user setting above
-     keys: %w(/home/gitlab-runner/.ssh/deploy),
+     keys: %w(/Users/emilychen/.ssh/local_deploy),
      forward_agent: false,
      auth_methods: %w(publickey)
      #password: 'please use keys'

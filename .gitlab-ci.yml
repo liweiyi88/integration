@@ -12,10 +12,10 @@ build:
     - master
   allow_failure: false
 
-deploy_production:
-  script:
-    - cap production deploy --trace
-  stage: deploy
-  only:
-    - master
-  allow_failure: false
+#deploy_production:
+#  script:
+#    - cap production deploy --trace
+#  stage: deploy
+#  only:
+#    - master
+#  allow_failure: false
