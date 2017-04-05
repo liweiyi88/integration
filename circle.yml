@@ -1,0 +1,11 @@
+machine:
+  timezone:
+    Australia/Melbourne
+  php:
+    version: 7.1.2
+
+deployment:
+  production:
+    branch: master
+    commands:
+      - bundle exec cap production deploy
