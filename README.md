@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/jmily/integration.svg?style=svg)](https://circleci.com/gh/jmily/integration)
+
 Integration Sample Project
 ===============
 
