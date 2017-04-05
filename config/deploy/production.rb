@@ -51,7 +51,7 @@ server 'escapestring.com',
    user: 'escape',
    roles: %w{web app},
    ssh_options: {
-     keys: %w(/Users/emilychen/.ssh/local_deploy),
+     keys: %w(/home/.ssh/circle_pepper),
      forward_agent: false,
      auth_methods: %w(publickey)
      #password: 'please use keys'
