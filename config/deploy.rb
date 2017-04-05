@@ -1,8 +1,8 @@
 # config valid only for current version of Capistrano
 lock "3.8.0"
 
-set :application, "integration-demo"
-set :repo_url, "git@gitlab.com:julianlol/integration-sample.git"
+set :application, "integration"
+set :repo_url, "git@github.com:jmily/integration.git"
 set :branch, "master"
 
 # Default branch is :master
