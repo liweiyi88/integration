@@ -30,12 +30,6 @@ class User
      */
     private $username;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="password", type="string", length=255)
-     */
-    private $password;
 
     /**
      * @Assert\Email(
@@ -83,30 +77,6 @@ class User
     public function getUsername()
     {
         return $this->username;
-    }
-
-    /**
-     * Set $password
-     *
-     * @param string $password
-     *
-     * @return User
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * Get password
-     *
-     * @return string
-     */
-    public function getPassword()
-    {
-        return $this->password;
     }
 
     /**
