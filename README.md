@@ -25,3 +25,4 @@ SQS may send you a number of messages which is fewer than the number you specify
 and we set 10 to `MaxNumberOfMessages`, we may still get only one message as SQS is distributed. However,
 If we have a large number of messages (e.g. 10,000 messages) in the queue, we will have a high chance to get all of the messages up to `MaxNumberOfMessages`.
 This is explained by [AWS PHP SDK Reference](http://docs.aws.amazon.com/aws-sdk-php/v3/api/api-sqs-2012-11-05.html#receivemessage) 
+d
