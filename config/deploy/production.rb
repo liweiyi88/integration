@@ -51,7 +51,7 @@ server 'escapestring.com',
    user: 'escape',
    roles: %w{web app},
    ssh_options: {
-     keys: %w(/home/.ssh/circle_pepper),
+     keys: %w(/home/ubuntu/.ssh/id_escape),
      forward_agent: false,
      auth_methods: %w(publickey)
      #password: 'please use keys'
