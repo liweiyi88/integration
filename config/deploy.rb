@@ -35,6 +35,6 @@ set :linked_dirs, fetch(:linked_dirs, []).push('var')
 
 namespace :deploy do
   task :migrate do
-    symfony_console('doctrine:migrations:migrate', '--no-interaction --env=prod')
+      invoke 'symfony:console', 'doctrine:migrations:migrate', '--no-interaction'
   end
 end
