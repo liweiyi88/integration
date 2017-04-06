@@ -33,8 +33,11 @@ set :linked_dirs, fetch(:linked_dirs, []).push('var')
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
-namespace :deploy do
-  task :migrate do
-      invoke 'symfony:console', 'doctrine:migrations:migrate', '--no-interaction'
-  end
+namespace :symfony do
+    namespace :doctrine do
+        task :migrate do
+            invoke 'symfony:console', 'doctrine:migrations:migrate', '--no-interaction'
+        end
+    end
+    before 'cache:warmup', 'symfony:doctrine:migrate'
 end
