@@ -9,3 +9,4 @@ deployment:
     branch: master
     commands:
       - bundle exec cap production deploy --trace
+      - bundle exec cap production deploy:migrate --trace
