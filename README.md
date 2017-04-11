@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/jmily/integration.svg?style=svg)](https://circleci.com/gh/jmily/integration)
+[![CircleCI](https://circleci.com/gh/liweiyi88/integration/tree/master.svg?style=svg)](https://circleci.com/gh/liweiyi88/integration/tree/master)
 
 Integration Sample Project
 ===============
