@@ -1,5 +1,5 @@
 <?php
-namespace AppBundle\Console;
+namespace AppBundle\Command;
 
 use AppBundle\Messaging\ConfirmationEmail;
 use AppBundle\Messaging\Mailchimp;

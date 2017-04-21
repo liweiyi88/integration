@@ -19,7 +19,7 @@ class Mailchimp implements MessageHandler
 
             $emailBody = \Swift_Message::newInstance()
                 ->setSubject('Email Confirmation')
-                ->setFrom('mailerweiyi@gmail.com')
+                ->setFrom('admin@escapestring.com')
                 ->setTo($user['email'])
                 ->setBody('Your information have been pushed to Mailchimp');
 
