@@ -1,14 +1,11 @@
 [![CircleCI](https://circleci.com/gh/liweiyi88/integration/tree/master.svg?style=shield)](https://circleci.com/gh/liweiyi88/integration/tree/master)
 
-Integration Sample Project
+Purpose
 ===============
 
-A sample project which implements Message/Event Driven approach.
+A project which implements Message/Event Driven approach.
 With this approach,integration services are decoupled from the main application to another integration application.
 Also, the interaction between the main application and integration app is asynchronous.
-
-# Framework and Tools
-Symfony3, JWT , SNS, SQS 
 
 # Steps
 Firstly, create a Topic by AWS Console, AWS Command or AWS API.
