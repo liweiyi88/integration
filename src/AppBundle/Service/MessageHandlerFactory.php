@@ -1,7 +1,6 @@
 <?php
 namespace AppBundle\Service;
 
-
 use AppBundle\Messaging\ConfirmationEmail;
 use AppBundle\Messaging\Mailchimp;
 use AppBundle\Messaging\MessageHandler;
@@ -32,5 +31,4 @@ class MessageHandlerFactory
 
         throw new \InvalidArgumentException('Unsupported Processor');
     }
-
 }

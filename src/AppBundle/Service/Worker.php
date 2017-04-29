@@ -1,7 +1,6 @@
 <?php
 namespace AppBundle\Service;
 
-
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 class Worker
@@ -69,5 +68,4 @@ class Worker
     {
         $this->cache = $cache;
     }
-
 }
