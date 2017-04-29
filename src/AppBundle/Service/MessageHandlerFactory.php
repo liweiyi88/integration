@@ -29,6 +29,6 @@ class MessageHandlerFactory
                 return $this->mailchimp;
         }
 
-        throw new \InvalidArgumentException('Unsupported Processor');
+        throw new \InvalidArgumentException('Unsupported handler');
     }
 }

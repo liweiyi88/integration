@@ -28,6 +28,6 @@ class CacheFactory
                 return new FilesystemAdapter();
         }
 
-        throw new \InvalidArgumentException('no such a cache connection');
+        throw new \InvalidArgumentException('Unsupported cache');
     }
 }
