@@ -29,6 +29,7 @@ services:
 
       cache.factory:
             class: AppBundle\Service\CacheFactory
+            arguments: ['@service_container']
 
       message.handler.factory:
             class: AppBundle\Service\MessageHandlerFactory
