@@ -30,6 +30,7 @@
 
         button {
             margin-top: 10px;
+            width:240px;
         }
 
     </style>
@@ -59,7 +60,7 @@
                     Email is required
                 </p>
 
-                <button type="submit" class="mdc-button mdc-button--raised mdc-button--primary mdc-ripple-upgraded mdc-ripple-upgraded--background-active-fill mdc-ripple-upgraded--foreground-activation">Save</button>
+                <button type="submit" data-mdc-auto-init="MDCRipple" class="mdc-button mdc-button--raised mdc-button--primary">Save</button>
                 {{ form_end(form) }}
         </div>
     </div>
