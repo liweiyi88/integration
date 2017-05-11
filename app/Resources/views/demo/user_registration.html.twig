@@ -1,13 +1,28 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container">
+    <div class="mdc-layout-grid">
         <div class="row">
             <div class="col-xs-12">
-                <h1>Demo</h1>
+
                 {{ form_start(form) }}
-                {{ form_widget(form) }}
-                <button type="submit" class="btn btn-primary">Save</button>
+
+                <div class="mdc-textfield mdc-textfield--upgraded" data-mdc-auto-init="MDCTextfield">
+                    {{ form_widget(form.username, {'attr': {'class':'mdc-textfield__input'}}) }}
+                    {{ form_label(form.username) }}
+                    {{ form_errors(form.username) }}
+                </div>
+
+                <div class="mdc-textfield mdc-textfield--upgraded" data-mdc-auto-init="MDCTextfield">
+                    {{ form_widget(form.email,  {'attr': {'class':'mdc-textfield__input'}})}}
+                    {{ form_label(form.email)}}
+                    {{ form_errors(form.email) }}
+                </div>
+
+
+
+
+                <button type="submit" class="mdc-button mdc-button--raised mdc-button--primary mdc-ripple-upgraded mdc-ripple-upgraded--background-active-fill mdc-ripple-upgraded--foreground-activation">Save</button>
                 {{ form_end(form) }}
             </div>
         </div>
