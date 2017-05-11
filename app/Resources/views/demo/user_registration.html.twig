@@ -1,30 +1,66 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .row .mdc-textfield, .row .mdc-textfield-helptext {
+            width: 240px;
+        }
+
+        .row .mdc-textfield {
+            margin-top: 0;
+        }
+
+        ul {
+            margin-top:0;
+            padding:0;
+            width: 240px;
+            list-style:none;
+        }
+
+        ul > li {
+            color: #d50000;
+            font-size: .75rem;
+        }
+
+        .mdc-layout-grid {
+            width: 256px;
+            padding-top: 9%;
+        }
+
+        button {
+            margin-top: 10px;
+        }
+
+    </style>
+{% endblock %}
+
 {% block body %}
     <div class="mdc-layout-grid">
         <div class="row">
-            <div class="col-xs-12">
-
                 {{ form_start(form) }}
 
                 <div class="mdc-textfield mdc-textfield--upgraded" data-mdc-auto-init="MDCTextfield">
                     {{ form_widget(form.username, {'attr': {'class':'mdc-textfield__input'}}) }}
                     {{ form_label(form.username) }}
-                    {{ form_errors(form.username) }}
                 </div>
+                {{ form_errors(form.username) }}
+                <p id="username-helptext" class="mdc-textfield-helptext mdc-textfield-helptext mdc-textfield-helptext--validation-msg" aria-hidden="true">
+                    Username is required
+                </p>
+
 
                 <div class="mdc-textfield mdc-textfield--upgraded" data-mdc-auto-init="MDCTextfield">
                     {{ form_widget(form.email,  {'attr': {'class':'mdc-textfield__input'}})}}
                     {{ form_label(form.email)}}
-                    {{ form_errors(form.email) }}
                 </div>
-
-
-
+                {{ form_errors(form.email) }}
+                <p id="email-helptext" class="mdc-textfield-helptext mdc-textfield-helptext mdc-textfield-helptext--validation-msg" aria-hidden="true">
+                    Email is required
+                </p>
 
                 <button type="submit" class="mdc-button mdc-button--raised mdc-button--primary mdc-ripple-upgraded mdc-ripple-upgraded--background-active-fill mdc-ripple-upgraded--foreground-activation">Save</button>
                 {{ form_end(form) }}
-            </div>
         </div>
     </div>
 {% endblock %}

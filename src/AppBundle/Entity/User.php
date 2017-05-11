@@ -24,6 +24,8 @@ class User
     private $id;
 
     /**
+     * @Assert\NotBlank(message = "Username is required")
+     *
      * @var string
      *
      * @ORM\Column(name="username", type="string", length=255)

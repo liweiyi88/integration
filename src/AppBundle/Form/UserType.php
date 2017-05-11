@@ -17,11 +17,13 @@ class UserType extends AbstractType
         $builder
             ->add('username', TextType::class, array(
                 'label' => 'Username',
-                'label_attr' => ['class' => 'mdc-textfield__label' ]
+                'label_attr' => ['class' => 'mdc-textfield__label'],
+                'required' => true
             ))
             ->add('email', EmailType::class, array(
                 'label' => 'Email',
-                'label_attr' => ['class' => 'mdc-textfield__label']
+                'label_attr' => ['class' => 'mdc-textfield__label'],
+                'required' => true
             ));
     }
 
