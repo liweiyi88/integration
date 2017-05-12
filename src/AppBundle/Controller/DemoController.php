@@ -30,7 +30,7 @@ class DemoController extends Controller
                 $this->getParameter('aws_user_created_arn')
             );
 
-            $this->addFlash('success', 'Thank you for registering with us');
+            $this->addFlash('success', 'Form Submitted successfully!');
             return $this->redirectToRoute('user_registration');
         }
 

@@ -7,14 +7,18 @@
     {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('css/mdc.min.css') }}">
         <link rel="stylesheet" href="{{ asset('vendor/fontawesome/css/font-awesome.min.css') }}">
+        <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
     {% endblock %}
 </head>
 <body>
 
 <div class="main-content">
     {% for msg in app.session.flashBag.get('success') %}
-        <div class="alert alert-success">
-            {{ msg }}
+        <div class="mdc-snackbar mdc-snackbar--active" aria-live="assertive" aria-atomic="true" aria-hidden="true">
+            <div class="mdc-snackbar__text">{{ msg }}</div>
+            <div class="mdc-snackbar__action-wrapper">
+                <button type="button" class="mdc-button mdc-snackbar__action-button"></button>
+            </div>
         </div>
     {% endfor %}
 

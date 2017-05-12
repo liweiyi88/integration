@@ -3,13 +3,25 @@
 {% block stylesheets %}
     {{ parent() }}
     <style>
-        .row .mdc-textfield, .row .mdc-textfield-helptext {
-            width: 240px;
+        html{
+            background-color: #f1f1f1;
+            font-family: 'Lato', sans-serif;
+        }
+
+        .title {
+            padding-top:8%;
+            width:340px;
+            margin: 0 auto;
+        }
+
+        .demo-component-width {
+            width: 336px;
         }
 
         .row .mdc-textfield {
             margin-top: 0;
         }
+
 
         ul {
             margin-top:0;
@@ -24,43 +36,69 @@
         }
 
         .mdc-layout-grid {
-            width: 256px;
-            padding-top: 9%;
+            width: 368px;
         }
 
-        button {
+        .submit {
             margin-top: 10px;
-            width:240px;
+            width:336px;
+        }
+
+        input {
+            width: 100%;
+        }
+
+        /* unvisited link */
+        a:link {
+            color: black;
+        }
+
+        /* visited link */
+        a:visited {
+            color: black;
+        }
+
+        /* mouse over link */
+        a:hover {
+            color: black;
+        }
+
+        /* selected link */
+        a:active {
+            color: black;
         }
 
     </style>
 {% endblock %}
 
 {% block body %}
+    <div class="header">
+        <div class="title"><h3>A Demo Of <a href="https://medium.com/@weiyi.li713/integrate-web-application-with-external-systems-by-using-message-queue-ac201469c02d" target="_blank">Web Application Integration</a></h3></div>
+    </div>
     <div class="mdc-layout-grid">
         <div class="row">
                 {{ form_start(form) }}
 
-                <div class="mdc-textfield mdc-textfield--upgraded" data-mdc-auto-init="MDCTextfield">
+                <div class="demo-component-width no-margin-top mdc-textfield mdc-textfield--upgraded" data-mdc-auto-init="MDCTextfield">
                     {{ form_widget(form.username, {'attr': {'class':'mdc-textfield__input'}}) }}
                     {{ form_label(form.username) }}
                 </div>
                 {{ form_errors(form.username) }}
-                <p id="username-helptext" class="mdc-textfield-helptext mdc-textfield-helptext mdc-textfield-helptext--validation-msg" aria-hidden="true">
+                <p id="username-helptext" class="demo-component-width no-margin-top mdc-textfield-helptext mdc-textfield-helptext mdc-textfield-helptext--validation-msg" aria-hidden="true">
                     Username is required
                 </p>
 
 
-                <div class="mdc-textfield mdc-textfield--upgraded" data-mdc-auto-init="MDCTextfield">
+                <div class="demo-component-width no-margin-top mdc-textfield mdc-textfield--upgraded" data-mdc-auto-init="MDCTextfield">
                     {{ form_widget(form.email,  {'attr': {'class':'mdc-textfield__input'}})}}
                     {{ form_label(form.email)}}
                 </div>
                 {{ form_errors(form.email) }}
-                <p id="email-helptext" class="mdc-textfield-helptext mdc-textfield-helptext mdc-textfield-helptext--validation-msg" aria-hidden="true">
+                <p id="email-helptext" class="demo-component-width no-margin-top mdc-textfield-helptext mdc-textfield-helptext mdc-textfield-helptext--validation-msg" aria-hidden="true">
                     Email is required
                 </p>
 
-                <button type="submit" data-mdc-auto-init="MDCRipple" class="mdc-button mdc-button--raised mdc-button--primary">Save</button>
+                <button type="submit" data-mdc-auto-init="MDCRipple" class="submit mdc-button mdc-button--raised mdc-button--primary">Save</button>
                 {{ form_end(form) }}
         </div>
     </div>
