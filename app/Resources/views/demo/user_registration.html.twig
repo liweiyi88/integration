@@ -8,8 +8,9 @@
             font-family: 'Lato', sans-serif;
         }
 
-        .title, .card {
-            width:440px;
+        .title{
+            text-align: center;
+            width:540px;
             margin: 0 auto;
         }
 
@@ -18,7 +19,7 @@
         }
 
         .demo-component-width {
-            width: 436px;
+            width: 536px;
         }
 
         .row .mdc-textfield {
@@ -38,12 +39,12 @@
         }
 
         .mdc-layout-grid {
-            width: 468px;
+            width: 568px;
         }
 
         .submit {
             margin-top: 10px;
-            width:436px;
+            width:536px;
         }
 
         input {
@@ -105,18 +106,38 @@
         </div>
     </div>
 
-    <div class="mdc-card card">
-        <section class="mdc-card__primary">
-            <h1 class="mdc-card__title mdc-card__title--large">AWS SQS</h1>
-            <h2 class="mdc-card__subtitle">Messages in the queue</h2>
-        </section>
-        <section class="mdc-card__supporting-text">
-            <div><strong>julian</strong></div>
-            <div><strong>alex</strong></div>
-        </section>
-        <section class="mdc-card__actions">
-
-            <button class="mdc-button mdc-button--compact mdc-card__action"> <div id="p2" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>Processing Queue</button>
-        </section>
+    <div class="mdc-layout-grid">
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+            <div class="mdc-card card">
+                <section class="mdc-card__primary">
+                    <h1 class="mdc-card__title mdc-card__title--large">Confirmation Queue</h1>
+                    <h2 class="mdc-card__subtitle">User to be processed</h2>
+                </section>
+                <section class="mdc-card__supporting-text">
+                    <div><strong>julian</strong></div>
+                    <div><strong>alex</strong></div>
+                </section>
+                <section class="mdc-card__actions">
+                    <button class="mdc-button mdc-button--compact mdc-card__action"> <div id="p2" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>Processing</button>
+                </section>
+            </div>
+        </div>
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+            <div class="mdc-card card">
+                <section class="mdc-card__primary">
+                    <h1 class="mdc-card__title mdc-card__title--large">Mailchimp Queue</h1>
+                    <h2 class="mdc-card__subtitle">User to be processed</h2>
+                </section>
+                <section class="mdc-card__supporting-text">
+                    <div><strong>julian</strong></div>
+                    <div><strong>alex</strong></div>
+                </section>
+                <section class="mdc-card__actions">
+                    <button class="mdc-button mdc-button--compact mdc-card__action"> <div id="p2" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>Processing</button>
+                </section>
+            </div>
+        </div>
     </div>
+
+
 {% endblock %}
