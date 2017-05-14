@@ -8,20 +8,22 @@
             font-family: 'Lato', sans-serif;
         }
 
-        .title {
-            padding-top:8%;
-            width:340px;
+        .title, .card {
+            width:440px;
             margin: 0 auto;
         }
 
+        .card {
+            margin-top: 5%;
+        }
+
         .demo-component-width {
-            width: 336px;
+            width: 436px;
         }
 
         .row .mdc-textfield {
             margin-top: 0;
         }
-
 
         ul {
             margin-top:0;
@@ -36,12 +38,12 @@
         }
 
         .mdc-layout-grid {
-            width: 368px;
+            width: 468px;
         }
 
         .submit {
             margin-top: 10px;
-            width:336px;
+            width:436px;
         }
 
         input {
@@ -73,7 +75,7 @@
 
 {% block body %}
     <div class="header">
-        <div class="title"><h3>A Demo Of <a href="https://medium.com/@weiyi.li713/integrate-web-application-with-external-systems-by-using-message-queue-ac201469c02d" target="_blank">Web Application Integration</a></h3></div>
+        <div class="title"><h4>A Demo Of <a href="https://medium.com/@weiyi.li713/integrate-web-application-with-external-systems-by-using-message-queue-ac201469c02d" target="_blank">Web Application Integration</a></h4></div>
     </div>
     <div class="mdc-layout-grid">
         <div class="row">
@@ -101,5 +103,20 @@
                 <button type="submit" data-mdc-auto-init="MDCRipple" class="submit mdc-button mdc-button--raised mdc-button--primary">Save</button>
                 {{ form_end(form) }}
         </div>
+    </div>
+
+    <div class="mdc-card card">
+        <section class="mdc-card__primary">
+            <h1 class="mdc-card__title mdc-card__title--large">AWS SQS</h1>
+            <h2 class="mdc-card__subtitle">Messages in the queue</h2>
+        </section>
+        <section class="mdc-card__supporting-text">
+            <div><strong>julian</strong></div>
+            <div><strong>alex</strong></div>
+        </section>
+        <section class="mdc-card__actions">
+
+            <button class="mdc-button mdc-button--compact mdc-card__action"> <div id="p2" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>Processing Queue</button>
+        </section>
     </div>
 {% endblock %}

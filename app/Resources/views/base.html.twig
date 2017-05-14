@@ -10,6 +10,8 @@
         <link rel="stylesheet" href="{{ asset('css/mdc.min.css') }}">
         <link rel="stylesheet" href="{{ asset('vendor/fontawesome/css/font-awesome.min.css') }}">
         <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
     {% endblock %}
 </head>
 <body>
@@ -30,6 +32,7 @@
 {% block javascripts %}
     <script src="{{ asset('js/mdc.min.js') }}"></script>
     <script>mdc.autoInit()</script>
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
