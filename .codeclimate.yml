@@ -3,9 +3,16 @@ engines:
         enabled: true
         config:
             file_extensions: "php"
-            rulesets: "cleancode,controversial,design"
+            rulesets: "cleancode,codesize,controversial,design,naming,unusedcode"
 
     phpcodesniffer:
         enabled: true
         config:
             standard: "PSR1,PSR2"
+exclude_paths:
+- "app/"
+- "bin/"
+- "config/"
+- "var/"
+- "web/"
+- "vendor/"
