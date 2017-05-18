@@ -1,0 +1,11 @@
+engines:
+    phpmd:
+        enabled: true
+        config:
+            file_extensions: "php"
+            rulesets: "cleancode,codesize,controversial,design"
+
+    phpcodesniffer:
+        enabled: true
+        config:
+            standard: "PSR1,PSR2"
