@@ -44,8 +44,11 @@ class SQSWorkerCommand extends ContainerAwareCommand
                 if ($result->get('Messages')) {
                     $messageHandler = $this->getContainer()->get('message.handler.factory')->get($handler);
                     foreach ($result->get('Messages') as $message) {
-                        $messageHandler->handle($message);
-                        $sqs->deleteMessage($url, $message['ReceiptHandle']);
+                        $user = $this->getUserObjectByMessage($message);
+                        if ($user !== null) {
+                            $messageHandler->handle($message);
+                            $sqs->deleteMessage($url, $message['ReceiptHandle']);
+                        }
                     }
                 } else {
                     $worker->sleep($sleepSeconds);
@@ -56,6 +59,23 @@ class SQSWorkerCommand extends ContainerAwareCommand
                 $this->getContainer()->get('logger')->error($e->getMessage());
             }
         }
+    }
+
+    /**
+     * @param $message
+     * @return mixed|null
+     */
+    private function getUserObjectByMessage($message)
+    {
+        if ($message != null) {
+            $messageJson = json_decode($message['Body'], true);
+            $user = json_decode($messageJson['Message'], true);
+
+            $this->getContainer()->get('jms_serializer')->deserialize($user);
+            return $user;
+        }
+
+        return null;
     }
 
     /**

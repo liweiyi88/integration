@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\Queue;
+
 /**
  * QueueRepository
  *
@@ -10,4 +12,9 @@ namespace AppBundle\Repository;
  */
 class QueueRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function delete(Queue $queue)
+    {
+        $this->_em->remove($queue);
+        $this->_em->flush();
+    }
 }
