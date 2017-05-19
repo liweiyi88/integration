@@ -111,11 +111,12 @@
             <div class="mdc-card card">
                 <section class="mdc-card__primary">
                     <h1 class="mdc-card__title mdc-card__title--large">Confirmation Queue</h1>
-                    <h2 class="mdc-card__subtitle">User to be processed</h2>
+                    <h2 class="mdc-card__subtitle">Users to be processed</h2>
                 </section>
                 <section class="mdc-card__supporting-text">
-                    <div><strong>julian</strong></div>
-                    <div><strong>alex</strong></div>
+                    {% for confirmation in confirmation_queue %}
+                        <div><strong>{{ confirmation.username }}</strong></div>
+                    {% endfor %}
                 </section>
                 <section class="mdc-card__actions">
                     <button class="mdc-button mdc-button--compact mdc-card__action"> <div id="p2" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>Processing</button>
@@ -126,11 +127,12 @@
             <div class="mdc-card card">
                 <section class="mdc-card__primary">
                     <h1 class="mdc-card__title mdc-card__title--large">Mailchimp Queue</h1>
-                    <h2 class="mdc-card__subtitle">User to be processed</h2>
+                    <h2 class="mdc-card__subtitle">Users to be processed</h2>
                 </section>
                 <section class="mdc-card__supporting-text">
-                    <div><strong>julian</strong></div>
-                    <div><strong>alex</strong></div>
+                    {% for mailchimp in mailchimp_queue %}
+                        <div><strong>{{ mailchimp.username }}</strong></div>
+                    {% endfor %}
                 </section>
                 <section class="mdc-card__actions">
                     <button class="mdc-button mdc-button--compact mdc-card__action"> <div id="p2" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>Processing</button>

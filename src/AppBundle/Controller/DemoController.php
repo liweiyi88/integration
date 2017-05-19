@@ -51,8 +51,13 @@ class DemoController extends Controller
             return $this->redirectToRoute('user_registration');
         }
 
+        $confirmationQueue = $this->getDoctrine()->getRepository('AppBundle:Queue')->findBy(['name' => Queue::CONFIRMATION]);
+        $mailchimpQueue = $this->getDoctrine()->getRepository('AppBundle:Queue')->findBy(['name' => Queue::MAILCHIMP]);
+
         return $this->render('demo/user_registration.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'confirmation_queue' => $confirmationQueue,
+            'mailchimp_queue' => $mailchimpQueue
         ]);
     }
 }
