@@ -9,10 +9,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * User
  *
- * @ORM\Table(name="user")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
+ * @ORM\Table(name="sign_up")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\SignUpRepository")
  */
-class User
+class SignUp
 {
     /**
      * @var int

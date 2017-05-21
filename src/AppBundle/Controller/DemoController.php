@@ -3,7 +3,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Queue;
 use AppBundle\Entity\User;
-use AppBundle\Form\UserType;
+use AppBundle\Form\SignUpType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -16,7 +16,7 @@ class DemoController extends Controller
      */
     public function registerAction(Request $request)
     {
-        $form = $this->createForm(UserType::class);
+        $form = $this->createForm(SignUpType::class);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
