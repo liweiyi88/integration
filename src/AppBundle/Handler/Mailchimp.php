@@ -1,7 +1,7 @@
 <?php
 namespace AppBundle\Handler;
 
-use AppBundle\Entity\User;
+use AppBundle\Entity\SignUp;
 
 class Mailchimp implements UserHandler
 {
@@ -13,12 +13,12 @@ class Mailchimp implements UserHandler
         $this->mailer = $mailer;
     }
 
-    public function handle(User $user)
+    public function handle(SignUp $signUp)
     {
         $emailBody = \Swift_Message::newInstance()
             ->setSubject('Email Confirmation')
             ->setFrom('admin@escapestring.com')
-            ->setTo($user->getEmail())
+            ->setTo($signUp->getEmail())
             ->setBody('Your information have been pushed to Mailchimp');
 
         $this->mailer->getTransport()->start();

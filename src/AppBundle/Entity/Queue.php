@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="queue")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\QueueRepository")
  */
-class Queue
+class Queue extends Command
 {
     const CONFIRMATION = 'confirmation';
     const MAILCHIMP = 'mailchimp';

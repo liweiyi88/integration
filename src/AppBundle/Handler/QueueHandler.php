@@ -3,6 +3,7 @@
 namespace AppBundle\Handler;
 
 
+use AppBundle\Entity\SignUp;
 use AppBundle\Entity\User;
 use AppBundle\Repository\QueueRepository;
 
@@ -15,9 +16,9 @@ class QueueHandler implements UserHandler
         $this->queueRepository = $queueRepository;
     }
 
-    public function handle(User $user)
+    public function handle(SignUp $signUp)
     {
-        $queue = $this->queueRepository->findBy(['email' => $user->getEmail()]);
+        $queue = $this->queueRepository->findBy(['email' => $signUp->getEmail()]);
         $this->queueRepository->delete($queue);
     }
 }

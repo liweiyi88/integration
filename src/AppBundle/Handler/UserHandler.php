@@ -1,9 +1,9 @@
 <?php
 namespace AppBundle\Handler;
 
-use AppBundle\Entity\User;
+use AppBundle\Entity\SignUp;
 
 interface UserHandler
 {
-    public function handle(User $user);
+    public function handle(SignUp $signUp);
 }
