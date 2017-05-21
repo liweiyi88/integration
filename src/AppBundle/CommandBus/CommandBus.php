@@ -2,7 +2,7 @@
 
 use AppBundle\Entity\Command;
 
-class CommandBus
+class CommandBus implements CommandBusInterface
 {
     private $handlerLocator;
 
@@ -19,5 +19,4 @@ class CommandBus
 
         return $handler->handle($command);
     }
-
 }

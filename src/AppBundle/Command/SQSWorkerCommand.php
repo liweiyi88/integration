@@ -44,8 +44,8 @@ class SQSWorkerCommand extends ContainerAwareCommand
                 if ($result->get('Messages')) {
                     $messageHandler = $this->getContainer()->get('message.handler.factory')->get($handler);
                     foreach ($result->get('Messages') as $message) {
-                        $user = $this->getUserObjectByMessage($message);
-                        if ($user !== null) {
+                        $sighUp = $this->getSighUpObjectByMessage($message);
+                        if ($sighUp !== null) {
                             $messageHandler->handle($message);
                             $sqs->deleteMessage($url, $message['ReceiptHandle']);
                         }
@@ -65,14 +65,14 @@ class SQSWorkerCommand extends ContainerAwareCommand
      * @param $message
      * @return mixed|null
      */
-    private function getUserObjectByMessage($message)
+    private function getSighUpObjectByMessage($message)
     {
         if ($message != null) {
             $messageJson = json_decode($message['Body'], true);
-            $user = json_decode($messageJson['Message'], true);
+            $sighUp = json_decode($messageJson['Message'], true);
 
-            $this->getContainer()->get('jms_serializer')->deserialize($user);
-            return $user;
+            $this->getContainer()->get('jms_serializer')->deserialize($sighUp, 'AppBundle\Entity\SighUp', 'json');
+            return $sighUp;
         }
 
         return null;
