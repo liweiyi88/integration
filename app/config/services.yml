@@ -4,36 +4,41 @@ parameters:
 #    parameter_name: value
 
 services:
-      aws.factory:
-            class: AppBundle\Service\Aws\AWSClientFactory
-            arguments:
-                - "%aws_version%"
-                - "%aws_region%"
-                - "%aws_key%"
-                - "%aws_secret%"
-      aws.sns.helper:
-            class: AppBundle\Service\Aws\SNS
-            arguments: ["@=service('aws.factory').create('sns')"]
+    aws.factory:
+        class: AppBundle\Service\Aws\AWSClientFactory
+        arguments:
+            - "%aws_version%"
+            - "%aws_region%"
+            - "%aws_key%"
+            - "%aws_secret%"
+    aws.sns.helper:
+        class: AppBundle\Service\Aws\SNS
+        arguments: ["@=service('aws.factory').create('sns')"]
 
-      aws.sqs.helper:
-            class: AppBundle\Service\Aws\SQS
-            arguments: ["@=service('aws.factory').create('sqs')"]
+    aws.sqs.helper:
+        class: AppBundle\Service\Aws\SQS
+        arguments: ["@=service('aws.factory').create('sqs')"]
 
-      confirmation.email:
-            class: AppBundle\Messaging\ConfirmationEmail
-            arguments: ['@mailer']
+    confirmation.email:
+        class: AppBundle\Messaging\ConfirmationEmail
+        arguments: ['@mailer']
 
-      mailchimp:
-            class: AppBundle\Messaging\Mailchimp
-            arguments: ['@mailer']
+    mailchimp:
+        class: AppBundle\Messaging\Mailchimp
+        arguments: ['@mailer']
 
-      cache.factory:
-            class: AppBundle\Service\CacheFactory
-            arguments: ['@service_container']
+    cache.factory:
+        class: AppBundle\Service\CacheFactory
+        arguments: ['@service_container']
 
-      message.handler.factory:
-            class: AppBundle\Service\MessageHandlerFactory
-            arguments: ['@confirmation.email', '@mailchimp']
+    message.handler.factory:
+        class: AppBundle\Service\MessageHandlerFactory
+        arguments: ['@confirmation.email', '@mailchimp']
 
-      worker:
-            class: AppBundle\Service\Worker
+    worker:
+        class: AppBundle\Service\Worker
+
+    command.bus:
+        class: AppBundle\CommandBus\CommandBus
+
+

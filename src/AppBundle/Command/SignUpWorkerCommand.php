@@ -1,14 +1,15 @@
 <?php
 namespace AppBundle\Command;
 
-use AppBundle\Messaging\ConfirmationEmail;
-use AppBundle\Messaging\Mailchimp;
+use AppBundle\Model\Command;
+use AppBundle\Model\ConfirmationEmail;
+use AppBundle\Model\Mailchimp;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 
-class SQSWorkerCommand extends ContainerAwareCommand
+class SignUpWorkerCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
@@ -16,7 +17,7 @@ class SQSWorkerCommand extends ContainerAwareCommand
             ->setName('process:queue')
             ->addOption('max_memory', null, InputOption::VALUE_REQUIRED, null, 128)
             ->addOption('sleep', null, InputOption::VALUE_REQUIRED, null, 5)
-            ->addOption('handler', null, InputOption::VALUE_REQUIRED, null, null)
+            ->addOption('command_name', null, InputOption::VALUE_REQUIRED, 'Command', null)
             ->addOption('cache', null, InputOption::VALUE_REQUIRED, null, null)
             ->addOption('max_number_messages', null, InputOption::VALUE_REQUIRED, null, 10)
             ->addOption('wait_time_seconds', null, InputOption::VALUE_REQUIRED, null, 20)
@@ -29,24 +30,24 @@ class SQSWorkerCommand extends ContainerAwareCommand
         $maxNumberOfMessages = intval($input->getOption('max_number_messages'));
         $waitTimeSeconds = intval($input->getOption('wait_time_seconds'));
         $sleepSeconds = intval($input->getOption('sleep'));
-        $handler = $input->getOption('handler');
+        $commandName = $input->getOption('command_name');
 
         $worker = $this->getContainer()->get('worker');
         $cache = $this->getContainer()->get('cache.factory')->get($input->getOption('cache'));
         $worker->setCache($cache);
 
         $lastRestart = $cache->getItem('last_restart_date')->get();
-        $url = $sqs->getQueueUrl($this->getQueueName($handler));
+        $url = $sqs->getQueueUrl($this->getQueueName($commandName));
 
         while (true) {
             try {
                 $result = $sqs->receiveMessage($url, $maxNumberOfMessages, $waitTimeSeconds);
                 if ($result->get('Messages')) {
-                    $messageHandler = $this->getContainer()->get('message.handler.factory')->get($handler);
+                    $commandBus = $this->getContainer()->get('command.bus');
                     foreach ($result->get('Messages') as $message) {
-                        $sighUp = $this->getSighUpObjectByMessage($message);
-                        if ($sighUp !== null) {
-                            $messageHandler->handle($message);
+                        $command = $this->getCommand($message, $commandName);
+                        if ($command instanceof Command) {
+                            $commandBus->handle($command);
                             $sqs->deleteMessage($url, $message['ReceiptHandle']);
                         }
                     }
@@ -62,29 +63,36 @@ class SQSWorkerCommand extends ContainerAwareCommand
     }
 
     /**
-     * @param $message
+     * @param string $message
+     * @param string $commandName
      * @return mixed|null
      */
-    private function getSighUpObjectByMessage($message)
+    private function getCommand($message, $commandName)
     {
         if ($message != null) {
+            $deserializer = $this->getContainer()->get('jms_serializer');
             $messageJson = json_decode($message['Body'], true);
-            $sighUp = json_decode($messageJson['Message'], true);
+            $message = json_decode($messageJson['Message'], true);
 
-            $this->getContainer()->get('jms_serializer')->deserialize($sighUp, 'AppBundle\Entity\SighUp', 'json');
-            return $sighUp;
+            switch ($commandName) {
+                case ConfirmationEmail::ALIAS:
+                    return $deserializer->deserialize($message, ConfirmationEmail::class, 'json');
+                case Mailchimp::ALIAS:
+                    return $deserializer->deserialize($message, Mailchimp::class, 'json');
+            }
         }
 
         return null;
     }
 
     /**
-     * @param string $name
-     * @return mixed
+     * @param string $commandName
+     * @return string
+     * @throws \InvalidArgumentException
      */
-    private function getQueueName($name)
+    private function getQueueName($commandName)
     {
-        switch ($name) {
+        switch ($commandName) {
             case ConfirmationEmail::ALIAS:
                 return $this->getContainer()->getParameter('confirmation_queue');
             case Mailchimp::ALIAS:

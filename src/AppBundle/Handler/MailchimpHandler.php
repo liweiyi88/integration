@@ -3,9 +3,8 @@ namespace AppBundle\Handler;
 
 use AppBundle\Entity\SignUp;
 
-class Mailchimp implements UserHandler
+class MailchimpHandler implements UserHandler
 {
-    const ALIAS = 'mailchimp';
     private $mailer;
 
     public function __construct(\Swift_Mailer $mailer)

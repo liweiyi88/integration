@@ -1,7 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
-
+namespace AppBundle\Model;
 
 abstract class Command
 {

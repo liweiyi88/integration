@@ -1,5 +1,7 @@
 <?php
 
+namespace AppBundle\CommandBus;
+
 use AppBundle\Entity\Command;
 
 class CommandBus implements CommandBusInterface
