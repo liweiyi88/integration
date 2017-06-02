@@ -1,9 +1,9 @@
 <?php
 namespace AppBundle\Handler;
 
-use AppBundle\Entity\SignUp;
+use AppBundle\Model\Command;
 
-class ConfirmationEmailHandler implements UserHandler
+class ConfirmationEmailHandler implements Handler
 {
     private $mailer;
 
@@ -12,12 +12,12 @@ class ConfirmationEmailHandler implements UserHandler
         $this->mailer = $mailer;
     }
 
-    public function handle(SignUp $signUp)
+    public function handle(Command $command)
     {
         $emailBody = \Swift_Message::newInstance()
             ->setSubject('Email Confirmation')
             ->setFrom('admin@escapestring.com')
-            ->setTo($signUp->getEmail())
+            ->setTo($command->getEmail())
             ->setBody('Your account has been confirmed');
 
         $this->mailer->getTransport()->start();

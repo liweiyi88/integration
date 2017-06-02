@@ -2,7 +2,7 @@
 
 namespace AppBundle\CommandBus;
 
-use AppBundle\Entity\Command;
+use AppBundle\Model\Command;
 
 class CommandBus implements CommandBusInterface
 {
