@@ -7,8 +7,6 @@ class ConfirmationEmail extends Command
 
     private $username;
 
-    private $email;
-
     /**
      * @return mixed
      */
@@ -23,21 +21,5 @@ class ConfirmationEmail extends Command
     public function setUsername($username)
     {
         $this->username = $username;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param mixed $email
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
     }
 }
