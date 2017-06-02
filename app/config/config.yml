@@ -68,3 +68,10 @@ swiftmailer:
     username:   "%mailer_user%"
     password:   "%mailer_password%"
 
+
+seferov_aws:
+    credentials:
+        key: "%aws_key%"
+        secret: "%aws_secret%"
+    region: "%aws_region%"
+

@@ -17,7 +17,7 @@ class QueueHandler implements Handler
 
     public function handle(Command $command)
     {
-        $queue = $this->queueRepository->findBy(['email' => $signUp->getEmail()]);
+        $queue = $this->queueRepository->findBy(['email' => $command->getEmail()]);
         $this->queueRepository->delete($queue);
     }
 }

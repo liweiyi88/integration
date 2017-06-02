@@ -1,5 +1,6 @@
 <?php
-namespace AppBundle\Service;
+
+namespace AppBundle\Factory;
 
 use Symfony\Component\Cache\Adapter\AbstractAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
@@ -8,6 +9,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class CacheFactory
 {
+    const FILE_SYSTEM = 'file_system';
+
     private $container;
 
     public function __construct(ContainerInterface $container)
@@ -15,16 +18,10 @@ class CacheFactory
         $this->container = $container;
     }
 
-    /**
-     * @param $cache
-     * @return AbstractAdapter
-     */
-    public function get($cache)
+    public function get(string $cache): AbstractAdapter
     {
         switch ($cache) {
-            case 'redis':
-                return new RedisAdapter(RedisAdapter::createConnection($this->container->getParameter('redis_dsn')));
-            case 'file_system':
+            case self::FILE_SYSTEM:
                 return new FilesystemAdapter();
         }
 

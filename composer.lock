@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8a6eb1541569d8aaa7f32a9d6f603b90",
+    "content-hash": "7839a11aa6b15b29e26d8e013701af3d",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -2303,6 +2303,55 @@
                 "simple-cache"
             ],
             "time": "2017-01-02T13:31:39+00:00"
+        },
+        {
+            "name": "seferov/aws-bundle",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/seferov/awsBundle.git",
+                "reference": "c9cff523442b4f08e23602cf35325f9e75d0a620"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/seferov/awsBundle/zipball/c9cff523442b4f08e23602cf35325f9e75d0a620",
+                "reference": "c9cff523442b4f08e23602cf35325f9e75d0a620",
+                "shasum": ""
+            },
+            "require": {
+                "aws/aws-sdk-php": "^3.19",
+                "php": ">=5.5",
+                "symfony/symfony": "~2.3|~3.0"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "~3.2"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Seferov\\AwsBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Farhad Safarov",
+                    "homepage": "https://farhadsafarov.com"
+                },
+                {
+                    "name": "Community",
+                    "homepage": "https://github.com/seferov/awsBundle/graphs/contributors"
+                }
+            ],
+            "description": "Symfony wrapper of AWS SDK",
+            "keywords": [
+                "amazon web services",
+                "aws"
+            ],
+            "time": "2016-09-18T21:56:35+00:00"
         },
         {
             "name": "sensio/distribution-bundle",
