@@ -4,6 +4,16 @@ parameters:
 #    parameter_name: value
 
 services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    AppBundle\:
+        resource: '../../src/AppBundle/*'
+        exclude: '../../src/AppBundle/{Entity,Repository}'
+
+
     aws.factory:
         class: AppBundle\Service\Aws\AWSClientFactory
         arguments:
