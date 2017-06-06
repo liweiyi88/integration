@@ -5,7 +5,9 @@ use AppBundle\Entity\Queue;
 use AppBundle\Entity\User;
 use AppBundle\Form\SignUpType;
 use AppBundle\Model\ConfirmationEmail;
+use AppBundle\Model\Mailchimp;
 use AppBundle\Queue\SQS;
+use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -44,25 +46,8 @@ class DemoController extends Controller
             $em->persist($mailchimpQueue);
             $em->flush();
 
-            $confirmationEmail = new ConfirmationEmail();
-            $confirmationEmail->setEmail($user->getEmail());
-            $confirmationEmail->setUsername($user->getUsername());
-
-            $confirmationMessage = $serializer->serialize($confirmationEmail,'json');
-
-
-//            $mailchimpMessage = $serializer->serialize($mailchimpQueue, 'json');
-//
-            $sqs->push($confirmationMessage, $this->getParameter('confirmation_queue'));
-//            $sqs->push($mailchimpMessage, $this->getParameter('mailchimp_queue'));
-
-
-
-//            $this->get('aws.sns.helper')->publish(
-//                $this->get('jms_serializer')->serialize($user, 'json'),
-//                $this->getParameter('aws_user_created_subject'),
-//                $this->getParameter('aws_user_created_arn')
-//            );
+            $this->pushConfirmationMessage($user->getEmail(), $user->getUsername(), $sqs, $serializer);
+            $this->pushMailChimpMessage($user->getEmail(), $user->getUesrname(), $sqs, $serializer);
 
             $this->addFlash('success', 'Form Submitted successfully!');
             return $this->redirectToRoute('user_registration');
@@ -77,4 +62,30 @@ class DemoController extends Controller
             'mailchimp_queue' => $mailchimpQueue
         ]);
     }
+
+    private function persistConfirmationQueue(string $email, string $username, EntityManager $entityManager)
+    {
+
+
+    }
+
+
+    private function pushConfirmationMessage(string $email, string $username, SQS $sqs, Serializer $serializer)
+    {
+        $confirmationEmail = new ConfirmationEmail();
+        $confirmationEmail->setEmail($email);
+        $confirmationEmail->setUsername($username);
+        $confirmationMessage = $serializer->serialize($confirmationEmail,'json');
+        $sqs->push($confirmationMessage, $this->getParameter('confirmation_queue'));
+    }
+
+    private function pushMailChimpMessage(string $email, string $username, SQS $sqs, Serializer $serializer)
+    {
+        $mailchimp = new Mailchimp();
+        $mailchimp->setEmail($email);
+        $mailchimp->setUsername($username);
+        $mailchimpMessage = $serializer->serialize($mailchimp, 'json');
+        $sqs->push($mailchimpMessage, $this->getParameter('mailchimp_queue'));
+    }
+
 }
