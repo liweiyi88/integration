@@ -8,6 +8,11 @@ class Mailchimp extends Command
 
     private $username;
 
+    public function __construct()
+    {
+        $this->class = self::class;
+    }
+
     /**
      * @return mixed
      */

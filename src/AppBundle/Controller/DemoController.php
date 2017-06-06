@@ -4,17 +4,20 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Queue;
 use AppBundle\Entity\User;
 use AppBundle\Form\SignUpType;
+use AppBundle\Model\ConfirmationEmail;
+use AppBundle\Queue\SQS;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\Serializer;
 
 class DemoController extends Controller
 {
     /**
      * @Route("/", name="user_registration")
      */
-    public function registerAction(Request $request)
+    public function registerAction(Request $request, SQS $sqs, Serializer $serializer)
     {
         $form = $this->createForm(SignUpType::class);
 
@@ -41,11 +44,25 @@ class DemoController extends Controller
             $em->persist($mailchimpQueue);
             $em->flush();
 
-            $this->get('aws.sns.helper')->publish(
-                $this->get('jms_serializer')->serialize($user, 'json'),
-                $this->getParameter('aws_user_created_subject'),
-                $this->getParameter('aws_user_created_arn')
-            );
+            $confirmationEmail = new ConfirmationEmail();
+            $confirmationEmail->setEmail($user->getEmail());
+            $confirmationEmail->setUsername($user->getUsername());
+
+            $confirmationMessage = $serializer->serialize($confirmationEmail,'json');
+
+
+//            $mailchimpMessage = $serializer->serialize($mailchimpQueue, 'json');
+//
+            $sqs->push($confirmationMessage, $this->getParameter('confirmation_queue'));
+//            $sqs->push($mailchimpMessage, $this->getParameter('mailchimp_queue'));
+
+
+
+//            $this->get('aws.sns.helper')->publish(
+//                $this->get('jms_serializer')->serialize($user, 'json'),
+//                $this->getParameter('aws_user_created_subject'),
+//                $this->getParameter('aws_user_created_arn')
+//            );
 
             $this->addFlash('success', 'Form Submitted successfully!');
             return $this->redirectToRoute('user_registration');

@@ -4,7 +4,8 @@ namespace AppBundle\Model;
 
 abstract class Command
 {
-    private $email;
+    protected $email;
+    protected $class;
 
     public function getEmail()
     {
@@ -14,5 +15,15 @@ abstract class Command
     public function setEmail($email)
     {
         $this->email = $email;
+    }
+
+    public function getClass()
+    {
+        return $this->class;
+    }
+
+    public function setClass($class)
+    {
+        $this->class = $class;
     }
 }

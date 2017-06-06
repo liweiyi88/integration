@@ -14,6 +14,14 @@ class SQS
         $this->client = $client;
     }
 
+    public function push(string $payload, string $queue): ?string
+    {
+        return $this->client->sendMessage([
+            'QueueUrl' => $this->getQueueUrl($queue),
+            'MessageBody' => $payload
+        ])->get('MessageId');
+    }
+
     public function getQueueUrl($queueName): ?string
     {
         $result = $this->client->getQueueUrl([
