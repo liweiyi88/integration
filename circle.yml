@@ -2,7 +2,7 @@ machine:
   timezone:
     Australia/Melbourne
   php:
-    version: 7.0.4
+    version: 7.1.4
 
 deployment:
   production:
