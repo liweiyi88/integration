@@ -13,6 +13,11 @@ services:
         resource: '../../src/AppBundle/*'
         exclude: '../../src/AppBundle/{Entity,Repository}'
 
+    AppBundle\Controller\:
+            resource: '../../src/AppBundle/Controller'
+            public: true
+            tags: ['controller.service_arguments']
+
     AppBundle\Queue\SQS:
         arguments: ["@aws.sqs"]
         public: true
