@@ -3,6 +3,8 @@
 namespace AppBundle\Command;
 
 use AppBundle\BaseCommandBus;
+use AppBundle\CommandBus\AddRemoveFromQueueCommandBus;
+use AppBundle\CommandBus\CommandBus;
 use AppBundle\Factory\CacheFactory;
 use AppBundle\Factory\CommandFactory;
 use AppBundle\Queue\SQS;
@@ -33,7 +35,9 @@ class WorkerCommand extends ContainerAwareCommand
         $worker = $this->getContainer()->get(Worker::class);
         $commandFactory = $this->getContainer()->get(CommandFactory::class);
         $cacheFactory = $this->getContainer()->get(CacheFactory::class);
-        $commandBus = $this->getContainer()->get(BaseCommandBus::class);
+        $innerCommandBus = $this->getContainer()->get(CommandBus::class);
+        $entityManager = $this->getContainer()->get('doctrine')->getManager();
+        $commandBus = new AddRemoveFromQueueCommandBus($innerCommandBus, $entityManager);
         $logger = $this->getContainer()->get('logger');
 
         $maxNumberOfMessages = intval($input->getOption('max_number_messages'));
@@ -50,9 +54,9 @@ class WorkerCommand extends ContainerAwareCommand
         while (true) {
             try {
                 $messages = $sqs->getMessages($url, $maxNumberOfMessages, $waitTimeSeconds);
-                if ($messages) {
+                if (count($messages) > 0) {
                     foreach ($messages as $message) {
-                        $command = $commandFactory->get($queueName, $sqs->getRawBody($message));
+                        $command = $commandFactory->get($sqs->getRawBody($message));
                         $commandBus->handle($command);
                         $sqs->deleteMessage($url, $message);
                     }
@@ -62,6 +66,7 @@ class WorkerCommand extends ContainerAwareCommand
 
                 $worker->stopIfNecessary(intval($input->getOption('max_memory')));
             } catch (\Exception $e) {
+                dump($e);
                 $logger->error($e->getMessage());
             }
         }

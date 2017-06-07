@@ -34,7 +34,7 @@ services:
         arguments: ['@service_container']
         public: true
 
-    AppBundle\Service\Worker:
+    AppBundle\Worker:
         public: true
 
     AppBundle\Factory\CommandFactory:

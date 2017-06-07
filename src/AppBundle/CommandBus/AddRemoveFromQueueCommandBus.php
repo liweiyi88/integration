@@ -2,24 +2,28 @@
 
 namespace AppBundle\CommandBus;
 
+use AppBundle\Entity\Queue;
 use AppBundle\Model\Command;
-use AppBundle\Repository\QueueRepository;
+use Doctrine\ORM\EntityManager;
 
 class AddRemoveFromQueueCommandBus implements CommandBusInterface
 {
     private $innerBus;
-    private $queueRepository;
+    private $entityManager;
 
-    public function __construct(CommandBusInterface $commandBus, QueueRepository $queueRepository)
+    public function __construct(CommandBusInterface $commandBus, EntityManager $entityManager)
     {
         $this->innerBus = $commandBus;
-        $this->queueRepository = $queueRepository;
+        $this->entityManager = $entityManager;
     }
 
     public function handle(Command $command)
     {
         $this->innerBus->handle($command);
-        $queue = $this->queueRepository->findBy(['email' => $command->getEmail()]);
-        $this->queueRepository->delete($queue);
+        $queue = $this->entityManager->getRepository(Queue::class)->findOneBy(['email' => $command->getEmail()]);
+        if ($queue) {
+            $this->entityManager->remove($queue);
+            $this->entityManager->flush();
+        }
     }
 }

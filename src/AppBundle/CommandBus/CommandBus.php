@@ -3,10 +3,16 @@
 namespace AppBundle\CommandBus;
 
 use AppBundle\Model\Command;
+use Symfony\Component\DependencyInjection\ServiceLocator;
 
 class CommandBus implements CommandBusInterface
 {
     private $handlerLocator;
+
+    public function __construct(ServiceLocator $locator)
+    {
+        $this->handlerLocator = $locator;
+    }
 
     public function handle(Command $command)
     {
