@@ -47,7 +47,7 @@ class Queue
     /**
      * @var datetime
      *
-     * @ORM\Column(name="create_at", type="datetime")
+     * @ORM\Column(name="create_at", type="datetime", nullable=true)
      */
     private $createAt;
 
