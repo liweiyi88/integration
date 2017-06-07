@@ -12,6 +12,10 @@ build:
     - master
   allow_failure: false
 
+machine:
+  php:
+    version: 7.1.4
+
 #deploy_production:
 #  script:
 #    - cap production deploy --trace
