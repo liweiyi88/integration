@@ -15,7 +15,7 @@ class CommandFactory
 
     public function get(string $message)
     {
-        $array = json_decode($message,true);
+        $array = json_decode($message, true);
         return $this->serializer->deserialize($message, $array['class'], 'json');
     }
 }
