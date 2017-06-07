@@ -4,36 +4,54 @@ parameters:
 #    parameter_name: value
 
 services:
-      aws.factory:
-            class: AppBundle\Service\Aws\AWSClientFactory
-            arguments:
-                - "%aws_version%"
-                - "%aws_region%"
-                - "%aws_key%"
-                - "%aws_secret%"
-      aws.sns.helper:
-            class: AppBundle\Service\Aws\SNS
-            arguments: ["@=service('aws.factory').create('sns')"]
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
 
-      aws.sqs.helper:
-            class: AppBundle\Service\Aws\SQS
-            arguments: ["@=service('aws.factory').create('sqs')"]
+    AppBundle\:
+        resource: '../../src/AppBundle/*'
+        exclude: '../../src/AppBundle/{Entity,Repository}'
 
-      confirmation.email:
-            class: AppBundle\Messaging\ConfirmationEmail
-            arguments: ['@mailer']
+    AppBundle\Controller\:
+            resource: '../../src/AppBundle/Controller'
+            public: true
+            tags: ['controller.service_arguments']
 
-      mailchimp:
-            class: AppBundle\Messaging\Mailchimp
-            arguments: ['@mailer']
+    AppBundle\Queue\SQS:
+        arguments: ["@aws.sqs"]
+        public: true
 
-      cache.factory:
-            class: AppBundle\Service\CacheFactory
-            arguments: ['@service_container']
+    AppBundle\Messaging\ConfirmationEmail:
+        arguments: ['@mailer']
+        public: true
 
-      message.handler.factory:
-            class: AppBundle\Service\MessageHandlerFactory
-            arguments: ['@confirmation.email', '@mailchimp']
+    AppBundle\Messaging\Mailchimp:
+        arguments: ['@mailer']
+        public: true
 
-      worker:
-            class: AppBundle\Service\Worker
+    AppBundle\Service\CacheFactory:
+        arguments: ['@service_container']
+        public: true
+
+    AppBundle\Worker:
+        public: true
+
+    AppBundle\Factory\CommandFactory:
+        arguments: ['@serializer']
+        public: true
+
+    AppBundle\Factory\CacheFactory:
+        public: true
+
+    command_handler_locator:
+        class: Symfony\Component\DependencyInjection\ServiceLocator
+        tags: ['container.service_locator']
+        arguments:
+            -
+                AppBundle\Model\ConfirmationEmail: '@AppBundle\Handler\ConfirmationEmailHandler'
+                AppBundle\Model\Mailchimp: '@AppBundle\Handler\MailchimpHandler'
+
+    AppBundle\CommandBus\CommandBus:
+        arguments: ["@command_handler_locator"]
+        public: true

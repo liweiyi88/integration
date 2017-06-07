@@ -12,6 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Queue
 {
+    const CONFIRMATION = 'confirmation';
+    const MAILCHIMP = 'mailchimp';
     /**
      * @var int
      *
@@ -42,6 +44,18 @@ class Queue
      */
     private $email;
 
+    /**
+     * @var datetime
+     *
+     * @ORM\Column(name="create_at", type="datetime")
+     */
+    private $createAt;
+
+
+    public function __construct()
+    {
+        $this->createAt = new \DateTime();
+    }
 
     /**
      * Get id
@@ -124,5 +138,28 @@ class Queue
     {
         return $this->email;
     }
-}
 
+    /**
+     * Set createAt
+     *
+     * @param \DateTime $createAt
+     *
+     * @return Queue
+     */
+    public function setCreateAt($createAt)
+    {
+        $this->createAt = $createAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createAt
+     *
+     * @return \DateTime
+     */
+    public function getCreateAt()
+    {
+        return $this->createAt;
+    }
+}

@@ -4,7 +4,6 @@ namespace AppBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-class QueueRepository extends EntityRepository
+class SignUpRepository extends EntityRepository
 {
-
 }
