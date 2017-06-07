@@ -66,7 +66,6 @@ class WorkerCommand extends ContainerAwareCommand
 
                 $worker->stopIfNecessary(intval($input->getOption('max_memory')));
             } catch (\Exception $e) {
-                dump($e);
                 $logger->error($e->getMessage());
             }
         }
