@@ -33,7 +33,7 @@ class Worker
         }
     }
 
-    public function queueShouldRestart($lastRestart): bool
+    public function queueShouldRestart(?string $lastRestart): bool
     {
         return $this->getTimestampOfLastQueueRestart() != $lastRestart;
     }
