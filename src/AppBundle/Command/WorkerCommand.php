@@ -52,6 +52,7 @@ class WorkerCommand extends ContainerAwareCommand
         $url = $sqs->getQueueUrl($queueName);
 
         while (true) {
+            sleep(2); //this line is unnecessary. It is only for demo use.
             try {
                 $messages = $sqs->getMessages($url, $maxNumberOfMessages, $waitTimeSeconds);
                 if (count($messages) > 0) {

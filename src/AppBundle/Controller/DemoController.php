@@ -10,6 +10,7 @@ use AppBundle\Model\ConfirmationEmail;
 use AppBundle\Model\Mailchimp;
 use AppBundle\Queue\SQS;
 use Doctrine\ORM\EntityManager;
+use AppBundle\Enum\Queue;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -44,23 +45,23 @@ class DemoController extends Controller
             $this->entityManager->persist($signUp);
             $this->entityManager->flush();
 
-            //The Queue entity is not necessary. It is just used to make it easier to show the process behind the sense.
-            $this->persistContent($signUp->getEmail(), $signUp->getUsername(), $this->getParameter('confirmation_queue'));
-            $this->persistContent($signUp->getEmail(), $signUp->getUsername(), $this->getParameter('mailchimp_queue'));
-
             //push message to the queue
-            $confirmationEmail = $this->createConfirmationEmail($signUp->getEmail(), $signUp->getUsername());
-            $this->push($confirmationEmail, $this->getParameter('confirmation_queue'));
+            $confirmationEmail = new ConfirmationEmail($signUp->getEmail(), $signUp->getUsername());
+            $this->push($confirmationEmail, Queue::CONFIRMATION);
 
-            $mailchimp = $this->createMailchimp($signUp->getEmail(), $signUp->getUsername());
-            $this->push($mailchimp, $this->getParameter('mailchimp_queue'));
+            $mailchimp = new Mailchimp($signUp->getEmail(), $signUp->getUsername());
+            $this->push($mailchimp, Queue::MAILCHIMP);
+
+            //The Queue entity is not necessary. It is just used to make it easier to show the process behind the sense.
+            $this->persistContent($signUp->getEmail(), $signUp->getUsername(), Queue::CONFIRMATION);
+            $this->persistContent($signUp->getEmail(), $signUp->getUsername(), Queue::MAILCHIMP);
 
             $this->addFlash('success', 'Form Submitted successfully!');
             return $this->redirectToRoute('user_registration');
         }
 
-        $confirmationQueue = $this->getDoctrine()->getRepository(Content::class)->findBy(['queue' => $this->getParameter('confirmation_queue')]);
-        $mailchimpQueue = $this->getDoctrine()->getRepository(Content::class)->findBy(['queue' => $this->getParameter('mailchimp_queue')]);
+        $confirmationQueue = $this->getDoctrine()->getRepository(Content::class)->findBy(['queue' => Queue::CONFIRMATION]);
+        $mailchimpQueue = $this->getDoctrine()->getRepository(Content::class)->findBy(['queue' => Queue::MAILCHIMP]);
 
         return $this->render('demo/user_registration.html.twig', [
             'form' => $form->createView(),
@@ -78,25 +79,6 @@ class DemoController extends Controller
 
         $this->entityManager->persist($queue);
         $this->entityManager->flush();
-    }
-
-
-    private function createConfirmationEmail(string $email, string $username)
-    {
-        $confirmationEmail = new ConfirmationEmail();
-        $confirmationEmail->setEmail($email);
-        $confirmationEmail->setUsername($username);
-
-        return $confirmationEmail;
-    }
-
-    private function createMailchimp(string $email, string $username)
-    {
-        $mailchimp = new Mailchimp();
-        $mailchimp->setEmail($email);
-        $mailchimp->setUsername($username);
-
-        return $mailchimp;
     }
 
     private function push(Command $command, string $queue)

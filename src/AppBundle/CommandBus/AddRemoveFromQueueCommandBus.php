@@ -4,7 +4,10 @@ namespace AppBundle\CommandBus;
 
 use AppBundle\Entity\Content;
 use AppBundle\Model\Command;
+use AppBundle\Model\ConfirmationEmail;
+use AppBundle\Model\Mailchimp;
 use Doctrine\ORM\EntityManager;
+use AppBundle\Enum\Queue;
 
 class AddRemoveFromQueueCommandBus implements CommandBusInterface
 {
@@ -20,7 +23,22 @@ class AddRemoveFromQueueCommandBus implements CommandBusInterface
     public function handle(Command $command)
     {
         $this->innerBus->handle($command);
-        $queue = $this->entityManager->getRepository(Content::class)->findOneBy(['email' => $command->getEmail()]);
+
+        if ($command instanceof ConfirmationEmail) {
+            $queue = Queue::CONFIRMATION;
+        } elseif ($command instanceof Mailchimp) {
+            $queue = Queue::MAILCHIMP;
+        } else {
+            throw new \RuntimeException('invalid command object');
+        }
+
+        $queue = $this->entityManager->getRepository(Content::class)->findOneBy(
+            [
+                'email' => $command->getEmail(),
+                'queue' => $queue
+            ]
+        );
+
         if ($queue) {
             $this->entityManager->remove($queue);
             $this->entityManager->flush();
