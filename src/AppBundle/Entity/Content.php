@@ -7,13 +7,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Queue
  *
- * @ORM\Table(name="queue")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\QueueRepository")
+ * @ORM\Table(name="content")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ContentRepository")
  */
-class Queue
+class Content
 {
-    const CONFIRMATION = 'confirmation';
-    const MAILCHIMP = 'mailchimp';
     /**
      * @var int
      *
@@ -26,9 +24,9 @@ class Queue
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="queue", type="string", length=255)
      */
-    private $name;
+    private $queue;
 
     /**
      * @var string
@@ -68,27 +66,19 @@ class Queue
     }
 
     /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Queue
+     * @return string
      */
-    public function setName($name)
+    public function getQueue(): string
     {
-        $this->name = $name;
-
-        return $this;
+        return $this->queue;
     }
 
     /**
-     * Get name
-     *
-     * @return string
+     * @param string $queue
      */
-    public function getName()
+    public function setQueue(string $queue)
     {
-        return $this->name;
+        $this->queue = $queue;
     }
 
     /**
@@ -96,7 +86,7 @@ class Queue
      *
      * @param string $username
      *
-     * @return Queue
+     * @return Content
      */
     public function setUsername($username)
     {
@@ -120,7 +110,7 @@ class Queue
      *
      * @param string $email
      *
-     * @return Queue
+     * @return Content
      */
     public function setEmail($email)
     {
@@ -144,7 +134,7 @@ class Queue
      *
      * @param \DateTime $createAt
      *
-     * @return Queue
+     * @return Content
      */
     public function setCreateAt($createAt)
     {

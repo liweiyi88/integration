@@ -1,7 +1,7 @@
 <?php
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Queue;
+use AppBundle\Entity\Content;
 use AppBundle\Entity\SignUp;
 use AppBundle\Entity\User;
 use AppBundle\Form\SignUpType;
@@ -45,8 +45,8 @@ class DemoController extends Controller
             $this->entityManager->flush();
 
             //The Queue entity is not necessary. It is just used to make it easier to show the process behind the sense.
-            $this->persistQueue($signUp->getEmail(), $signUp->getUsername(), Queue::CONFIRMATION);
-            $this->persistQueue($signUp->getEmail(), $signUp->getUsername(), Queue::MAILCHIMP);
+            $this->persistContent($signUp->getEmail(), $signUp->getUsername(), $this->getParameter('confirmation_queue'));
+            $this->persistContent($signUp->getEmail(), $signUp->getUsername(), $this->getParameter('mailchimp_queue'));
 
             //push message to the queue
             $confirmationEmail = $this->createConfirmationEmail($signUp->getEmail(), $signUp->getUsername());
@@ -59,8 +59,8 @@ class DemoController extends Controller
             return $this->redirectToRoute('user_registration');
         }
 
-        $confirmationQueue = $this->getDoctrine()->getRepository('AppBundle:Queue')->findBy(['name' => Queue::CONFIRMATION]);
-        $mailchimpQueue = $this->getDoctrine()->getRepository('AppBundle:Queue')->findBy(['name' => Queue::MAILCHIMP]);
+        $confirmationQueue = $this->getDoctrine()->getRepository(Content::class)->findBy(['queue' => $this->getParameter('confirmation_queue')]);
+        $mailchimpQueue = $this->getDoctrine()->getRepository(Content::class)->findBy(['queue' => $this->getParameter('mailchimp_queue')]);
 
         return $this->render('demo/user_registration.html.twig', [
             'form' => $form->createView(),
@@ -69,10 +69,10 @@ class DemoController extends Controller
         ]);
     }
 
-    private function persistQueue(string $email, string $username, string $queueName)
+    private function persistContent(string $email, string $username, string $queueName)
     {
-        $queue = new Queue();
-        $queue->setName($queueName);
+        $queue = new Content();
+        $queue->setQueue($queueName);
         $queue->setEmail($email);
         $queue->setUsername($username);
 
