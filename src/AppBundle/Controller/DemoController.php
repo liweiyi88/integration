@@ -52,7 +52,7 @@ class DemoController extends Controller
             $mailchimp = new Mailchimp($signUp->getEmail(), $signUp->getUsername());
             $this->push($mailchimp, Queue::MAILCHIMP);
 
-            //The Queue entity is not necessary. It is just used to make it easier to show the process behind the sense.
+            //The Content entity is not necessary. It is just used to make it easier to show the process behind the sense.
             $this->persistContent($signUp->getEmail(), $signUp->getUsername(), Queue::CONFIRMATION);
             $this->persistContent($signUp->getEmail(), $signUp->getUsername(), Queue::MAILCHIMP);
 
