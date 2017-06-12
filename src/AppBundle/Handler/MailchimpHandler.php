@@ -18,7 +18,7 @@ class MailchimpHandler implements Handler
             ->setSubject('Email Confirmation')
             ->setFrom('admin@escapestring.com')
             ->setTo($command->getEmail())
-            ->setBody('Your information have been pushed to Mailchimp');
+            ->setBody('Opt in mailchimp successfully');
 
         $this->mailer->getTransport()->start();
         $this->mailer->send($emailBody);
