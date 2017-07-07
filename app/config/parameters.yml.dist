@@ -29,9 +29,5 @@ parameters:
     aws_user_created_arn: ~
     aws_user_created_subject: ~
 
-    #AWS SQS parameters
-    confirmation_queue: ~
-    mailchimp_queue: ~
-
     redis_dsn: redis://localhost:6379
 

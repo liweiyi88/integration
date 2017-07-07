@@ -115,7 +115,7 @@
                 </section>
                 <section class="mdc-card__supporting-text">
                     {% for confirmation in confirmation_queue %}
-                        <div><strong>{{ confirmation.username }}</strong></div>
+                        <div id="confirmation-content"><strong>{{ confirmation.username }}</strong></div>
                     {% endfor %}
                 </section>
                 <section class="mdc-card__actions">
@@ -131,7 +131,7 @@
                 </section>
                 <section class="mdc-card__supporting-text">
                     {% for mailchimp in mailchimp_queue %}
-                        <div><strong>{{ mailchimp.username }}</strong></div>
+                        <div id="mailchimp-content"><strong>{{ mailchimp.username }}</strong></div>
                     {% endfor %}
                 </section>
                 <section class="mdc-card__actions">
@@ -140,6 +140,21 @@
             </div>
         </div>
     </div>
+    <input type="hidden" id="get-content-confirmation" value="{{ path('get_content', {'queue' : 'confirmation_email'}) }}">
+    <input type="hidden" id="get-content-mailchimp" value="{{ path('get_content', {'queue' : 'mailchimp'}) }}">
+{% endblock %}
 
-
+{% block javascripts %}
+    <script>
+        $(document).ready(function(){
+            var confirmation_url = $('#get-content-confirmation').val();
+           $.ajax({
+               type: "GET",
+               url: confirmation_url,
+               success: function(data){
+                   console.log(data);
+               }
+           });
+        });
+    </script>
 {% endblock %}
