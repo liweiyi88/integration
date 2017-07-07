@@ -14,6 +14,7 @@ use AppBundle\Enum\Queue;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Serializer;
 
@@ -28,6 +29,22 @@ class DemoController extends Controller
         $this->serializer = $serializer;
         $this->entityManager = $entityManager;
         $this->sqs = $sqs;
+    }
+
+    /**
+     * @Route("/content/get/{queue}", name="get_content")
+     */
+    public function getJsonContent($queue)
+    {
+        $contents = $this->getDoctrine()->getRepository(Content::class)->findBy(['queue' => $queue]);
+
+        $contentsArray = [];
+
+        foreach ($contents as $content) {
+            $contentsArray[$content->getId()] = $content->getUsername();
+        }
+
+        return new JsonResponse($contentsArray);
     }
 
     /**
