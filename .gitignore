@@ -17,3 +17,4 @@
 /var/jwt
 .idea
 supervisord.log
+supervisord.pid
