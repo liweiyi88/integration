@@ -17,8 +17,7 @@ start:          ## Install and start the project
 start: build up app/config/parameters.yml db perm
 
 stop:           ## Remove docker containers
-	$(FIG) kill
-	$(FIG) rm -v --force
+	$(FIG) rm -v --force --stop
 
 reset:          ## Reset the whole project
 reset: stop start
