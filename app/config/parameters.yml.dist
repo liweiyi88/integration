@@ -2,11 +2,12 @@
 # Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
 # http://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
 parameters:
-    database_host:     127.0.0.1
-    database_port:     ~
-    database_name:     integration_sample
-    database_user:     root
-    database_password: ~
+    env(DATABASE_HOST): db
+    env(DATABASE_PORT): 3306
+    env(DATABASE_SOCKET): null
+    env(DATABASE_NAME): integration
+    env(DATABASE_USER): root
+    env(DATABASE_PASSWORD): root
     # You should uncomment this if you want use pdo_sqlite
     # database_path: "%kernel.root_dir%/data.db3"
 

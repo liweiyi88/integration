@@ -18,3 +18,4 @@
 .idea
 supervisord.log
 supervisord.pid
+/lib
