@@ -9,14 +9,14 @@ use AppBundle\Model\Command;
 use AppBundle\Model\ConfirmationEmail;
 use AppBundle\Model\Mailchimp;
 use AppBundle\Queue\SQS;
-use Doctrine\ORM\EntityManager;
 use AppBundle\Enum\Queue;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class DemoController extends Controller
 {
@@ -24,7 +24,7 @@ class DemoController extends Controller
     private $serializer;
     private $sqs;
 
-    public function __construct(Serializer $serializer, EntityManager $entityManager, SQS $sqs)
+    public function __construct(SerializerInterface $serializer, EntityManagerInterface $entityManager, SQS $sqs)
     {
         $this->serializer = $serializer;
         $this->entityManager = $entityManager;

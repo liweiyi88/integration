@@ -14,7 +14,7 @@ help:
 ##---------------------------------------------------------------------------
 
 start:          ## Install and start the project
-start: build up app/config/parameters.yml db assets-amp perm
+start: build up app/config/parameters.yml db perm
 
 stop:           ## Remove docker containers
 	$(FIG) kill
