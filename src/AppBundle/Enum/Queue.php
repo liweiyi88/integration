@@ -4,6 +4,5 @@ namespace AppBundle\Enum;
 
 class Queue
 {
-    const CONFIRMATION = 'confirmation_email';
-    const MAILCHIMP = 'mailchimp';
+    const TWITTER = 'twitter';
 }
