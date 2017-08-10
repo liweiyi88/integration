@@ -44,14 +44,10 @@ services:
     AppBundle\Factory\CacheFactory:
         public: true
 
-    command_handler_locator:
-        class: Symfony\Component\DependencyInjection\ServiceLocator
-        tags: ['container.service_locator']
-        arguments:
-            -
-                AppBundle\Model\ConfirmationEmail: '@AppBundle\Handler\ConfirmationEmailHandler'
-                AppBundle\Model\Mailchimp: '@AppBundle\Handler\MailchimpHandler'
-
-    AppBundle\CommandBus\CommandBus:
-        arguments: ["@command_handler_locator"]
-        public: true
+#    command_handler_locator:
+#        class: Symfony\Component\DependencyInjection\ServiceLocator
+#        tags: ['container.service_locator']
+#
+#    AppBundle\CommandBus\CommandBus:
+#        arguments: ["@command_handler_locator"]
+#        public: true
