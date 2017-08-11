@@ -101,60 +101,11 @@
                     Email is required
                 </p>
 
-                <button type="submit" data-mdc-auto-init="MDCRipple" class="submit mdc-button mdc-button--raised mdc-button--primary">Save</button>
+                <button data-mdc-auto-init="MDCRipple" class="submit mdc-button mdc-button--raised mdc-button--primary">Save</button>
                 {{ form_end(form) }}
         </div>
     </div>
-
-    <div class="mdc-layout-grid">
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-            <div class="mdc-card card">
-                <section class="mdc-card__primary">
-                    <h1 class="mdc-card__title mdc-card__title--large">Confirmation Queue</h1>
-                    <h2 class="mdc-card__subtitle">Users to be processed</h2>
-                </section>
-                <section class="mdc-card__supporting-text">
-                    {% for confirmation in confirmation_queue %}
-                        <div id="confirmation-content"><strong>{{ confirmation.username }}</strong></div>
-                    {% endfor %}
-                </section>
-                <section class="mdc-card__actions">
-                    <button class="mdc-button mdc-button--compact mdc-card__action"> <div id="p2" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>Processing</button>
-                </section>
-            </div>
-        </div>
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-            <div class="mdc-card card">
-                <section class="mdc-card__primary">
-                    <h1 class="mdc-card__title mdc-card__title--large">Mailchimp Queue</h1>
-                    <h2 class="mdc-card__subtitle">Users to be processed</h2>
-                </section>
-                <section class="mdc-card__supporting-text">
-                    {% for mailchimp in mailchimp_queue %}
-                        <div id="mailchimp-content"><strong>{{ mailchimp.username }}</strong></div>
-                    {% endfor %}
-                </section>
-                <section class="mdc-card__actions">
-                    <button class="mdc-button mdc-button--compact mdc-card__action"> <div id="p2" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>Processing</button>
-                </section>
-            </div>
-        </div>
-    </div>
-    <input type="hidden" id="get-content-confirmation" value="{{ path('get_content', {'queue' : 'confirmation_email'}) }}">
-    <input type="hidden" id="get-content-mailchimp" value="{{ path('get_content', {'queue' : 'mailchimp'}) }}">
 {% endblock %}
 
 {% block javascripts %}
-    <script>
-        $(document).ready(function(){
-            var confirmation_url = $('#get-content-confirmation').val();
-           $.ajax({
-               type: "GET",
-               url: confirmation_url,
-               success: function(data){
-                   console.log(data);
-               }
-           });
-        });
-    </script>
 {% endblock %}

@@ -22,7 +22,6 @@ class CommandBus implements CommandBusInterface
             return;
         }
 
-        // get the service from the service locator (and instantiate it)
         $handler = $this->handlerLocator->get($commandClass);
 
         return $handler->handle($command);

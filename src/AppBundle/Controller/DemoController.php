@@ -6,7 +6,6 @@ use AppBundle\Entity\SignUp;
 use AppBundle\Entity\User;
 use AppBundle\Form\SignUpType;
 use AppBundle\Queue\SQS;
-use AppBundle\Enum\Queue;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -46,13 +45,10 @@ class DemoController extends Controller
             return $this->redirectToRoute('user_registration');
         }
 
-        $confirmationQueue = $this->getDoctrine()->getRepository(Content::class)->findBy(['queue' => Queue::CONFIRMATION]);
-        $mailchimpQueue = $this->getDoctrine()->getRepository(Content::class)->findBy(['queue' => Queue::MAILCHIMP]);
+        //TODO: push serialized message to SQS
 
         return $this->render('demo/user_registration.html.twig', [
-            'form' => $form->createView(),
-            'confirmation_queue' => $confirmationQueue,
-            'mailchimp_queue' => $mailchimpQueue
+            'form' => $form->createView()
         ]);
     }
 }

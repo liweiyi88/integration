@@ -4,7 +4,6 @@ namespace AppBundle\Queue;
 
 use Aws\Sqs\SqsClient;
 use Aws\Result;
-use function dump;
 
 class SQS
 {
