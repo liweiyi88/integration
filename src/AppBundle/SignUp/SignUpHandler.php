@@ -3,7 +3,7 @@
 namespace AppBundle\SignUp;
 
 use AppBundle\Entity\SignUp;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class SignUpHandler
@@ -12,7 +12,7 @@ class SignUpHandler
     private $dispatcher;
 
     public function __construct(
-        EntityManager $entityManager,
+        EntityManagerInterface $entityManager,
         EventDispatcherInterface $dispatcher
     ) {
         $this->entityManager = $entityManager;

@@ -1,8 +1,6 @@
 <?php
 
-namespace AppBundle\Queue\Infrastructure;
-
-use AppBundle\Queue\Job;
+namespace AppBundle\Queue;
 
 interface Queueable
 {

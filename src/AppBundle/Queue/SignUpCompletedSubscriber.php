@@ -2,18 +2,17 @@
 
 namespace AppBundle\Queue;
 
-use AppBundle\Queue\Infrastructure\Queueable;
 use AppBundle\SignUp\SignUpEvent;
 use AppBundle\SignUp\SignUpEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class SignUpCompletedSubscriber implements EventSubscriberInterface
 {
     private $serializer;
     private $queue;
 
-    public function __construct(Serializer $serializer, Queueable $queue)
+    public function __construct(SerializerInterface $serializer, Queueable $queue)
     {
         $this->serializer = $serializer;
         $this->queue = $queue;

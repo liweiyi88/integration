@@ -1,8 +1,7 @@
 <?php
 
-namespace AppBundle\Queue\Infrastructure;
+namespace AppBundle\Queue;
 
-use AppBundle\Queue\Job;
 use Aws\Sqs\SqsClient;
 use Aws\Result;
 
