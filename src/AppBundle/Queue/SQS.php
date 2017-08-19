@@ -1,48 +1,50 @@
 <?php
 
-namespace AppBundle\Queue;
+namespace AppBundle\Queue\Infrastructure;
 
+use AppBundle\Queue\Job;
 use Aws\Sqs\SqsClient;
 use Aws\Result;
 
-class SQS
+class SQS implements Queueable
 {
     private $client;
+    private $job;
 
     public function __construct(SqsClient $client)
     {
         $this->client = $client;
     }
 
-    public function push(string $payload, string $queue): ?string
+    public function push(): ?string
     {
         return $this->client->sendMessage([
-            'QueueUrl' => $this->getQueueUrl($queue),
-            'MessageBody' => $payload
+            'QueueUrl' => $this->getQueueUrl(),
+            'MessageBody' => $this->job->getPayload()
         ])->get('MessageId');
     }
 
-    public function getQueueUrl($queueName): ?string
+    public function getQueueUrl(): ?string
     {
         $result = $this->client->getQueueUrl([
-            'QueueName' => $queueName
+            'QueueName' => $this->job->getName()
         ]);
 
         return $result->get('QueueUrl');
     }
 
-    public function receiveMessage(string $queueUrl, int $maxNumberOfMessages = 1, int $waitTimeSeconds = 0): ?Result
+    public function receiveMessage(): ?Result
     {
         return $this->client->receiveMessage([
-            'QueueUrl' => $queueUrl,
-            'MaxNumberOfMessages' => $maxNumberOfMessages,
-            'WaitTimeSeconds' => $waitTimeSeconds
+            'QueueUrl' => $this->getQueueUrl(),
+            'MaxNumberOfMessages' => $this->job->getMaxNumberOfMessages(),
+            'WaitTimeSeconds' => $this->job->getWaitTimeSeconds()
         ]);
     }
 
-    public function getMessages(string $queueUrl, int $maxNumberOfMessages = 1, int $waitTimeSeconds = 0): ?array
+    public function getMessages(): ?array
     {
-        $result = $this->receiveMessage($queueUrl, $maxNumberOfMessages, $waitTimeSeconds);
+        $result = $this->receiveMessage();
 
         return $result->get('Messages');
     }
@@ -52,11 +54,16 @@ class SQS
         return $message['Body'];
     }
 
-    public function deleteMessage(string $url, array $message): void
+    public function deleteMessage(array $message): void
     {
         $this->client->deleteMessage([
-            'QueueUrl' => $url,
+            'QueueUrl' => $this->getQueueUrl(),
             'ReceiptHandle' => $message['ReceiptHandle']
         ]);
+    }
+
+    public function setJob(Job $job): void
+    {
+        $this->job = $job;
     }
 }
