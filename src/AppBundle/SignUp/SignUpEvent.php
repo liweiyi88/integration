@@ -2,7 +2,6 @@
 
 namespace AppBundle\SignUp;
 
-
 use AppBundle\Entity\SignUp;
 use Symfony\Component\EventDispatcher\Event;
 

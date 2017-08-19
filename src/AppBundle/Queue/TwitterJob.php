@@ -2,7 +2,6 @@
 
 namespace AppBundle\Queue;
 
-
 class TwitterJob implements Job
 {
     const QUEUE_NAME = 'twitter';

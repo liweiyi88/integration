@@ -19,7 +19,6 @@ class SignUpController extends Controller
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             $signUpHandler->persist($form->getData());
 
             $this->addFlash('success', 'Form Submitted successfully!');

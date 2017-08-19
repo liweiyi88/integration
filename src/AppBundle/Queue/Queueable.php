@@ -2,7 +2,6 @@
 
 namespace AppBundle\Queue\Infrastructure;
 
-
 use AppBundle\Queue\Job;
 
 interface Queueable
