@@ -44,6 +44,6 @@ services:
     AppBundle\Factory\CacheFactory:
         public: true
 
-    AppBundle\Queue\SignUpCompletedSubscriber:
+    AppBundle\Queue\SignUpCompletedTwitterSubscriber:
         arguments: ['@serializer', '@AppBundle\Queue\SQS']
 

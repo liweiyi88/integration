@@ -8,7 +8,7 @@ use AppBundle\SignUp\SignUpEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class SignUpCompletedSubscriber implements EventSubscriberInterface
+class SignUpCompletedTwitterSubscriber implements EventSubscriberInterface
 {
     private $serializer;
     private $queue;
