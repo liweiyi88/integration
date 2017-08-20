@@ -4,22 +4,12 @@
     {{ parent() }}
     <style>
         html{
-            background-color: #f1f1f1;
+            background-color: #f9f9f9;
             font-family: 'Lato', sans-serif;
         }
 
-        .title{
-            text-align: center;
-            width:540px;
-            margin: 0 auto;
-        }
-
-        .card {
-            margin-top: 5%;
-        }
-
         .demo-component-width {
-            width: 536px;
+            width: 300px;
         }
 
         .row .mdc-textfield {
@@ -39,12 +29,12 @@
         }
 
         .mdc-layout-grid {
-            width: 568px;
+            width: 300px;
         }
 
         .submit {
             margin-top: 10px;
-            width:536px;
+            width:300px;
         }
 
         input {
@@ -71,13 +61,18 @@
             color: black;
         }
 
+        .twitter-feed {
+            width: 300px;
+            margin-top: 20px;
+        }
+        .mdc-textfield+.mdc-textfield-helptext {
+          margin-bottom: 0;
+        }
+
     </style>
 {% endblock %}
 
 {% block body %}
-    <div class="header">
-        <div class="title"><h4>A Demo Of <a href="https://medium.com/@weiyi.li713/integrate-web-application-with-external-systems-by-using-message-queue-ac201469c02d" target="_blank">Web Application Integration</a></h4></div>
-    </div>
     <div class="mdc-layout-grid">
         <div class="row">
                 {{ form_start(form) }}
@@ -91,7 +86,6 @@
                     Username is required
                 </p>
 
-
                 <div class="demo-component-width no-margin-top mdc-textfield mdc-textfield--upgraded" data-mdc-auto-init="MDCTextfield">
                     {{ form_widget(form.email,  {'attr': {'class':'mdc-textfield__input'}})}}
                     {{ form_label(form.email)}}
@@ -103,6 +97,10 @@
 
                 <button data-mdc-auto-init="MDCRipple" class="submit mdc-button mdc-button--raised mdc-button--primary">Save</button>
                 {{ form_end(form) }}
+
+            <div class="twitter-feed" id="twitter-feed">
+                <a class="twitter-timeline" data-lang="en" data-width="400" data-height="350" href="https://twitter.com/liweiyi88">Tweets by liweiyi88</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+            </div>
         </div>
     </div>
 {% endblock %}
