@@ -1,10 +1,10 @@
 <?php
 
-namespace AppBundle\Queue;
+namespace AppBundle\Queue\Job;
 
 interface Job
 {
-    public function getName(): string;
+    public function getQueueName(): string;
     public function getMaxNumberOfMessages(): int;
     public function getWaitTimeSeconds(): int;
     public function getPayload(): string;

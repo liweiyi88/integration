@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Queue;
+namespace AppBundle\Queue\Job;
 
 class TwitterJob implements Job
 {
@@ -15,7 +15,7 @@ class TwitterJob implements Job
         $this->payload = $payload;
     }
 
-    public function getName(): string
+    public function getQueueName(): string
     {
         return self::QUEUE_NAME;
     }

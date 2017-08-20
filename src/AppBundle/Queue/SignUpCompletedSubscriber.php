@@ -2,6 +2,7 @@
 
 namespace AppBundle\Queue;
 
+use AppBundle\Queue\Job\TwitterJob;
 use AppBundle\SignUp\SignUpEvent;
 use AppBundle\SignUp\SignUpEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -31,7 +32,6 @@ class SignUpCompletedSubscriber implements EventSubscriberInterface
         $payload = $this->serializer->serialize($signUp, 'json');
 
         $job = new TwitterJob($payload);
-        $this->queue->setJob($job);
-        $this->queue->push();
+        $this->queue->setJob($job)->push();
     }
 }
