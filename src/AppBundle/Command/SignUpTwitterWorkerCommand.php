@@ -2,6 +2,7 @@
 
 namespace AppBundle\Command;
 
+use AppBundle\Entity\SignUp;
 use AppBundle\Factory\CacheFactory;
 use AppBundle\Factory\ObjectFactory;
 use AppBundle\Infrastructure\Api\Twitter;
@@ -39,18 +40,15 @@ class SignUpTwitterWorkerCommand extends ContainerAwareCommand
         $cache = $cacheFactory->get($input->getOption('cache'));
         $worker->setCache($cache);
 
-        //TODO: will this throw any exception?
-        $job = new TwitterJob();
-        $sqs->setJob($job);
-
+        $sqs->setJob(new TwitterJob());
         while (true) {
-            sleep(2); //this line is unnecessary. It is only for demo use.
             try {
                 $messages = $sqs->getMessages();
                 if (count($messages) > 0) {
                     foreach ($messages as $message) {
-                        $command = $objectFactory->get($sqs->getRawBody($message));
-                        $twitterApi->push($command);
+                        /**@var SignUp $signUp **/
+                        $signUp = $objectFactory->get($sqs->getRawBody($message));
+                        $twitterApi->push($signUp);
                         $sqs->deleteMessage($message);
                     }
                 } else {
