@@ -13,7 +13,7 @@ class SignUpCompletedTwitterSubscriber implements EventSubscriberInterface
     private $serializer;
     private $queue;
 
-    public function __construct(SerializerInterface $serializer, Queueable $queue)
+    public function __construct(SerializerInterface $serializer, SQS $queue)
     {
         $this->serializer = $serializer;
         $this->queue = $queue;

@@ -10,7 +10,7 @@ class TwitterJob implements Job
 
     private $payload;
 
-    public function __construct(string $payload)
+    public function __construct(string $payload = null)
     {
         $this->payload = $payload;
     }

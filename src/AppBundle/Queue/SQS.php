@@ -9,6 +9,9 @@ use Aws\Result;
 class SQS implements Queueable
 {
     private $client;
+    private static $queueUrl;
+
+    /**@var Job **/
     private $job;
 
     public function __construct(SqsClient $client)
@@ -34,11 +37,15 @@ class SQS implements Queueable
             throw new \Exception('queue name is required');
         }
 
-        $result = $this->client->getQueueUrl([
-            'QueueName' => $this->job->getQueueName()
-        ]);
+        if (self::$queueUrl === null) {
+            $result = $this->client->getQueueUrl([
+                'QueueName' => $this->job->getQueueName()
+            ]);
 
-        return $result->get('QueueUrl');
+            self::$queueUrl = $result->get('QueueUrl');
+        }
+
+        return self::$queueUrl;
     }
 
     public function receiveMessage(): ?Result

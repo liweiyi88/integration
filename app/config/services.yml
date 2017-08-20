@@ -37,13 +37,13 @@ services:
     AppBundle\Worker:
         public: true
 
-    AppBundle\Factory\CommandFactory:
+    AppBundle\Factory\ObjectFactory:
         arguments: ['@serializer']
         public: true
 
     AppBundle\Factory\CacheFactory:
         public: true
 
-    AppBundle\Queue\SignUpCompletedTwitterSubscriber:
-        arguments: ['@serializer', '@AppBundle\Queue\SQS']
+    AppBundle\Infrastructure\Api\Twitter:
+        public: true
 
