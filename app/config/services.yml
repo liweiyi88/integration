@@ -44,10 +44,11 @@ services:
     AppBundle\Factory\CacheFactory:
         public: true
 
-    AppBundle\Infrastructure\Api\Twitter:
+    AppBundle\Infrastructure\Api\TwitterApiFactory:
         arguments:
-        - '%twitter_access_token%'
-        - '%twitter_access_token_secret%'
-        - "@=service('AppBundle\\Infrastructure\\Api\\HttpClientFactory').get()"
+        - "%twitter_consumer_key%"
+        - "%twitter_consumer_secret%"
+        - "%twitter_access_token%"
+        - "%twitter_access_token_secret%"
         public: true
 

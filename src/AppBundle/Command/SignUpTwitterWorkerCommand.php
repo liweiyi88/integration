@@ -5,7 +5,7 @@ namespace AppBundle\Command;
 use AppBundle\Entity\SignUp;
 use AppBundle\Factory\CacheFactory;
 use AppBundle\Factory\ObjectFactory;
-use AppBundle\Infrastructure\Api\Twitter;
+use AppBundle\Infrastructure\Api\TwitterApiFactory;
 use AppBundle\Queue\Job\TwitterJob;
 use AppBundle\Queue\SQS;
 use AppBundle\Worker;
@@ -32,7 +32,7 @@ class SignUpTwitterWorkerCommand extends ContainerAwareCommand
         $worker = $this->getContainer()->get(Worker::class);
         $objectFactory = $this->getContainer()->get(ObjectFactory::class);
         $cacheFactory = $this->getContainer()->get(CacheFactory::class);
-        $twitterApi = $this->getContainer()->get(Twitter::class);
+        $twitterApi = $this->getContainer()->get(TwitterApiFactory::class)->get();
         $logger = $this->getContainer()->get('logger');
 
         $sleepSeconds = intval($input->getOption('sleep'));
@@ -48,7 +48,9 @@ class SignUpTwitterWorkerCommand extends ContainerAwareCommand
                     foreach ($messages as $message) {
                         /**@var SignUp $signUp **/
                         $signUp = $objectFactory->get($sqs->getRawBody($message));
-                        $twitterApi->push($signUp);
+                        $tweet = $signUp->getUsername().' has just submitted the application form!';
+
+                        $twitterApi->post('statuses/update', ['status' => $tweet]);
                         $sqs->deleteMessage($message);
                     }
                 } else {
