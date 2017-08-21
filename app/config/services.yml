@@ -45,5 +45,9 @@ services:
         public: true
 
     AppBundle\Infrastructure\Api\Twitter:
+        arguments:
+        - '%twitter_access_token%'
+        - '%twitter_access_token_secret%'
+        - "@=service('AppBundle\\Infrastructure\\Api\\HttpClientFactory').get()"
         public: true
 
