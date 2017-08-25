@@ -26,10 +26,6 @@ parameters:
     aws_key: ~
     aws_secret: ~
 
-    #AWS SNS parameters
-    aws_user_created_arn: ~
-    aws_user_created_subject: ~
-
     #Twitter access
     twitter_access_token: ~
     twitter_access_token_secret: ~
