@@ -2,11 +2,11 @@
 
 namespace AppBundle\Command;
 
-use AppBundle\BaseCommandBus;
-use AppBundle\CommandBus\AddRemoveFromQueueCommandBus;
-use AppBundle\CommandBus\CommandBus;
+use AppBundle\Entity\SignUp;
 use AppBundle\Factory\CacheFactory;
-use AppBundle\Factory\CommandFactory;
+use AppBundle\Factory\ObjectFactory;
+use AppBundle\Infrastructure\Api\TwitterApiFactory;
+use AppBundle\Queue\Job\TwitterJob;
 use AppBundle\Queue\SQS;
 use AppBundle\Worker;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -14,7 +14,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 
-class WorkerCommand extends ContainerAwareCommand
+class SignUpTwitterWorkerCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
@@ -22,10 +22,7 @@ class WorkerCommand extends ContainerAwareCommand
             ->setName('process:queue')
             ->addOption('max_memory', null, InputOption::VALUE_REQUIRED, null, 128)
             ->addOption('sleep', null, InputOption::VALUE_REQUIRED, null, 5)
-            ->addOption('queue_name', null, InputOption::VALUE_REQUIRED, 'Command', null)
             ->addOption('cache', null, InputOption::VALUE_REQUIRED, null, null)
-            ->addOption('max_number_messages', null, InputOption::VALUE_REQUIRED, null, 10)
-            ->addOption('wait_time_seconds', null, InputOption::VALUE_REQUIRED, null, 20)
             ->setDescription('Process AWS SQS messages');
     }
 
@@ -33,33 +30,28 @@ class WorkerCommand extends ContainerAwareCommand
     {
         $sqs = $this->getContainer()->get(SQS::class);
         $worker = $this->getContainer()->get(Worker::class);
-        $commandFactory = $this->getContainer()->get(CommandFactory::class);
+        $objectFactory = $this->getContainer()->get(ObjectFactory::class);
         $cacheFactory = $this->getContainer()->get(CacheFactory::class);
-        $innerCommandBus = $this->getContainer()->get(CommandBus::class);
-        $entityManager = $this->getContainer()->get('doctrine')->getManager();
-        $commandBus = new AddRemoveFromQueueCommandBus($innerCommandBus, $entityManager);
+        $twitterApi = $this->getContainer()->get(TwitterApiFactory::class)->get();
         $logger = $this->getContainer()->get('logger');
 
-        $maxNumberOfMessages = intval($input->getOption('max_number_messages'));
-        $waitTimeSeconds = intval($input->getOption('wait_time_seconds'));
         $sleepSeconds = intval($input->getOption('sleep'));
-        $queueName = $input->getOption('queue_name');
 
         $cache = $cacheFactory->get($input->getOption('cache'));
         $worker->setCache($cache);
 
-        //TODO: will this throw any exception?
-        $url = $sqs->getQueueUrl($queueName);
-
+        $sqs->setJob(new TwitterJob());
         while (true) {
-            sleep(2); //this line is unnecessary. It is only for demo use.
             try {
-                $messages = $sqs->getMessages($url, $maxNumberOfMessages, $waitTimeSeconds);
+                $messages = $sqs->getMessages();
                 if (count($messages) > 0) {
                     foreach ($messages as $message) {
-                        $command = $commandFactory->get($sqs->getRawBody($message));
-                        $commandBus->handle($command);
-                        $sqs->deleteMessage($url, $message);
+                        /**@var SignUp $signUp **/
+                        $signUp = $objectFactory->get($sqs->getRawBody($message));
+                        $tweet = $signUp->getUsername().' has just submitted the application form!';
+
+                        $twitterApi->post('statuses/update', ['status' => $tweet]);
+                        $sqs->deleteMessage($message);
                     }
                 } else {
                     $worker->sleep($sleepSeconds);

@@ -37,21 +37,18 @@ services:
     AppBundle\Worker:
         public: true
 
-    AppBundle\Factory\CommandFactory:
+    AppBundle\Factory\ObjectFactory:
         arguments: ['@serializer']
         public: true
 
     AppBundle\Factory\CacheFactory:
         public: true
 
-    command_handler_locator:
-        class: Symfony\Component\DependencyInjection\ServiceLocator
-        tags: ['container.service_locator']
+    AppBundle\Infrastructure\Api\TwitterApiFactory:
         arguments:
-            -
-                AppBundle\Model\ConfirmationEmail: '@AppBundle\Handler\ConfirmationEmailHandler'
-                AppBundle\Model\Mailchimp: '@AppBundle\Handler\MailchimpHandler'
-
-    AppBundle\CommandBus\CommandBus:
-        arguments: ["@command_handler_locator"]
+        - "%twitter_consumer_key%"
+        - "%twitter_consumer_secret%"
+        - "%twitter_access_token%"
+        - "%twitter_access_token_secret%"
         public: true
+

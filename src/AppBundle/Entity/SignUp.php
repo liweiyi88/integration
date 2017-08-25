@@ -46,6 +46,12 @@ class SignUp
      */
     private $email;
 
+    private $class;
+
+    public function __construct()
+    {
+        $this->class = self::class;
+    }
 
     /**
      * Get id
@@ -103,5 +109,13 @@ class SignUp
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getClass()
+    {
+        return $this->class;
     }
 }

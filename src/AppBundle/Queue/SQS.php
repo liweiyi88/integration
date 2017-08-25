@@ -2,48 +2,66 @@
 
 namespace AppBundle\Queue;
 
+use AppBundle\Queue\Job\Job;
 use Aws\Sqs\SqsClient;
 use Aws\Result;
-use function dump;
 
-class SQS
+class SQS implements Queueable
 {
     private $client;
+    private static $queueUrl;
+
+    /**@var Job **/
+    private $job;
 
     public function __construct(SqsClient $client)
     {
         $this->client = $client;
     }
 
-    public function push(string $payload, string $queue): ?string
+    public function push(): ?string
     {
+        $this->stopIfInvalidJob();
+
         return $this->client->sendMessage([
-            'QueueUrl' => $this->getQueueUrl($queue),
-            'MessageBody' => $payload
+            'QueueUrl' => $this->getQueueUrl(),
+            'MessageBody' => $this->job->getPayload()
         ])->get('MessageId');
     }
 
-    public function getQueueUrl($queueName): ?string
+    public function getQueueUrl(): ?string
     {
-        $result = $this->client->getQueueUrl([
-            'QueueName' => $queueName
-        ]);
+        $this->stopIfInvalidJob();
 
-        return $result->get('QueueUrl');
+        if ($this->job->getQueueName() === null) {
+            throw new \Exception('queue name is required');
+        }
+
+        if (self::$queueUrl === null) {
+            $result = $this->client->getQueueUrl([
+                'QueueName' => $this->job->getQueueName()
+            ]);
+
+            self::$queueUrl = $result->get('QueueUrl');
+        }
+
+        return self::$queueUrl;
     }
 
-    public function receiveMessage(string $queueUrl, int $maxNumberOfMessages = 1, int $waitTimeSeconds = 0): ?Result
+    public function receiveMessage(): ?Result
     {
+        $this->stopIfInvalidJob();
+
         return $this->client->receiveMessage([
-            'QueueUrl' => $queueUrl,
-            'MaxNumberOfMessages' => $maxNumberOfMessages,
-            'WaitTimeSeconds' => $waitTimeSeconds
+            'QueueUrl' => $this->getQueueUrl(),
+            'MaxNumberOfMessages' => $this->job->getMaxNumberOfMessages(),
+            'WaitTimeSeconds' => $this->job->getWaitTimeSeconds()
         ]);
     }
 
-    public function getMessages(string $queueUrl, int $maxNumberOfMessages = 1, int $waitTimeSeconds = 0): ?array
+    public function getMessages(): ?array
     {
-        $result = $this->receiveMessage($queueUrl, $maxNumberOfMessages, $waitTimeSeconds);
+        $result = $this->receiveMessage();
 
         return $result->get('Messages');
     }
@@ -53,11 +71,36 @@ class SQS
         return $message['Body'];
     }
 
-    public function deleteMessage(string $url, array $message): void
+    public function deleteMessage(array $message): void
     {
         $this->client->deleteMessage([
-            'QueueUrl' => $url,
+            'QueueUrl' => $this->getQueueUrl(),
             'ReceiptHandle' => $message['ReceiptHandle']
         ]);
+    }
+
+    public function setJob(Job $job): Queueable
+    {
+        $this->job = $job;
+        return $this;
+    }
+
+    private function stopIfInvalidJob(): void
+    {
+        if ($this->job === null) {
+            throw new \Exception('a job is required');
+        }
+
+        if ($this->job->getQueueName() === null) {
+            throw new \Exception('the queue name is required');
+        }
+
+        if ($this->job->getMaxNumberOfMessages() === null) {
+            throw new \Exception('the max number of message is required');
+        }
+
+        if ($this->job->getWaitTimeSeconds() === null) {
+            throw new \Exception('the wait time seconds is required');
+        }
     }
 }

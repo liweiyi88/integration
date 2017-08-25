@@ -4,7 +4,7 @@ namespace AppBundle\Factory;
 
 use Symfony\Component\Serializer\Serializer;
 
-class CommandFactory
+class ObjectFactory
 {
     private $serializer;
 

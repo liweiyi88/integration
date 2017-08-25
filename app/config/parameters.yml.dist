@@ -30,5 +30,11 @@ parameters:
     aws_user_created_arn: ~
     aws_user_created_subject: ~
 
+    #Twitter access
+    twitter_access_token: ~
+    twitter_access_token_secret: ~
+    twitter_consumer_key: ~
+    twitter_consumer_secret: ~
+
     redis_dsn: redis://localhost:6379
 
