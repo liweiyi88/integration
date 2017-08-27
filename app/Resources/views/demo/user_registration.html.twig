@@ -78,6 +78,14 @@
 {% block body %}
     <div class="mdl-grid">
         <div class="row mdl-cell mdl-cell--5-col">
+                <p><a href="https://github.com/liweiyi88/integration" target="_blank">What is this?</a></p>
+
+                {% for message in app.flashes('notice') %}
+                    <div class="flash-notice">
+                        {{ message }} <span> Or view <a href="https://twitter.com/escapestringbot">‎@escapestringbot</a> directly</span>
+                    </div>
+                {% endfor %}
+
                 {{ form_start(form) }}
 
                 <div class="demo-component-width no-margin-top mdc-textfield mdc-textfield--upgraded" data-mdc-auto-init="MDCTextfield">
@@ -108,5 +116,4 @@
     </div>
 {% endblock %}
 
-{% block javascripts %}
-{% endblock %}
+{% block javascripts %}{% endblock %}

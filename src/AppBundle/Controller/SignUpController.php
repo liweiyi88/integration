@@ -21,7 +21,14 @@ class SignUpController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $signUpHandler->persist($form->getData());
 
-            $this->addFlash('success', 'Form Submitted successfully!');
+            $this->addFlash(
+                'notice',
+                'Wait a few seconds and your will see a new tweet in the twitter widget.'
+            );
+
+            $this->addFlash('success',
+                'Form Submitted successfully!'
+            );
             return $this->redirectToRoute('user_registration');
         }
 
