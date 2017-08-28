@@ -11,7 +11,7 @@ How does this project work?
 
 The application will save the form data into the database and push a message to AWS SQS after form submission. A background worker keeps running to poll the message from SQS and 
 process it (pushing a new tweet to twitter in this case). This is a typical use case that "when something happens, we need to do a,b,c...". We can
-process a,b,c... in either synchronous or asynchronous ways which depends on your business rules. 
+process a,b,c... in either a synchronous or asynchronous way which depends on your business rules. 
 
 Read [my post](https://medium.com/@weiyi.li713/integrate-web-application-with-external-systems-by-using-message-queue-ac201469c02d) for more explanations
 
