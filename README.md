@@ -7,7 +7,7 @@ This project is to demonstrate the way to integrate application with third-party
 
 How does this project work?
 ------------------------
-[The demo](escapestring.com)
+[The demo](http://escapestring.com)
 
 The application will save the form data into the database and push a message to AWS SQS after form submission. A background worker keeps running to poll the message from SQS and 
 process it (pushing a new tweet to twitter in this case). This is a typical use case that "when something happens, we need to do a,b,c...". We can
