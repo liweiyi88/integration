@@ -1,10 +1,9 @@
 <?php
 
-namespace AppBundle\Queue;
+namespace AppBundle\SignUp;
 
 use AppBundle\Queue\Job\TwitterJob;
-use AppBundle\SignUp\SignUpEvent;
-use AppBundle\SignUp\SignUpEvents;
+use AppBundle\Queue\SQS;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
