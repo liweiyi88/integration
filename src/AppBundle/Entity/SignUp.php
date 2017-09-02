@@ -3,7 +3,6 @@
 namespace AppBundle\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -46,6 +45,13 @@ class SignUp
      */
     private $email;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ip", type="string", length=255, nullable=true)
+     */
+    private $ip;
+
     private $class;
 
     public function __construct()
@@ -68,7 +74,7 @@ class SignUp
      *
      * @param string $username
      *
-     * @return User
+     * @return SignUp
      */
     public function setUsername($username)
     {
@@ -92,7 +98,7 @@ class SignUp
      *
      * @param string $email
      *
-     * @return User
+     * @return SignUp
      */
     public function setEmail($email)
     {
@@ -117,5 +123,29 @@ class SignUp
     public function getClass()
     {
         return $this->class;
+    }
+
+    /**
+     * Set ip
+     *
+     * @param string $ip
+     *
+     * @return SignUp
+     */
+    public function setIp($ip)
+    {
+        $this->ip = $ip;
+
+        return $this;
+    }
+
+    /**
+     * Get ip
+     *
+     * @return string
+     */
+    public function getIp()
+    {
+        return $this->ip;
     }
 }
