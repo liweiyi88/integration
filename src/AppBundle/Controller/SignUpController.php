@@ -19,7 +19,10 @@ class SignUpController extends Controller
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $signUpHandler->persist($form->getData());
+
+            $signUp = $form->getData();
+            $signUp->setIp($request->getClientIp());
+            $signUpHandler->persist($signUp);
 
             $this->addFlash(
                 'notice',
