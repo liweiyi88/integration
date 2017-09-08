@@ -9,6 +9,7 @@ machine:
     DATABASE_NAME: integration
     DATABASE_USER: root
     DATABASE_PASSWORD: root
+    CODECLIMATE_REPO_TOKEN: ffb6e7b99bf7c0cf6ddaefe587f192306298d5d77a5945a9869f884caca1628a
 
 deployment:
   production:
