@@ -9,6 +9,7 @@ jobs:
             - checkout
             - run: composer self-update
             - run: composer install -n --prefer-dist
+            - run: gem install bundler
             - deploy:
                 command: |
                       if [ "${CIRCLE_BRANCH}" == "master" ]; then
