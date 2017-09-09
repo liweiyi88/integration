@@ -7,10 +7,10 @@ jobs:
             - image: circleci/php:7.1.8-browsers
         steps:
             - checkout
+            - run: sudo apt-get install rubygems
+            - run: gem install bundler
             - run: composer self-update
             - run: composer install -n --prefer-dist
-            - run: sudo apt-get install ruby-dev
-            - run: gem install bundler
             - deploy:
                 command: |
                       if [ "${CIRCLE_BRANCH}" == "master" ]; then
