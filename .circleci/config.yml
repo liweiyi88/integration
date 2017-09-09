@@ -8,7 +8,8 @@ jobs:
         steps:
             - checkout
             - run: sudo apt-get install rubygems
-            - run: gem install bundler
+            - run: sudo gem install bundler
+            - run: sudo bundler install
             - run: composer self-update
             - run: composer install -n --prefer-dist
             - deploy:
