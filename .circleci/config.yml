@@ -4,11 +4,11 @@ jobs:
         timezone:
             Australia/Melbourne
         docker:
-            - image: circleci/php:7.1-fpm
+            - image: circleci/php:7.1.8-browsers
         steps:
             - checkout
             - run: composer self-update
-            - run: composer install
+            - run: composer install -n --prefer-dist
             - deploy:
                 command: |
                       if [ "${CIRCLE_BRANCH}" == "master" ]; then
