@@ -9,6 +9,7 @@ jobs:
             - checkout
             - run: composer self-update
             - run: composer install -n --prefer-dist
+            - run: sudo apt-get install rubygems-integration
             - run: gem install bundler
             - deploy:
                 command: |
