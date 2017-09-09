@@ -1,8 +1,22 @@
 version: 2
 jobs:
-   build:
-     docker:
-       - image: circleci/php:7.1-fpm
-     steps:
-       - checkout
-       - run: echo "hello world"
+    build:
+        timezone:
+            Australia/Melbourne
+        docker:
+            - image: circleci/php:7.1-fpm
+        environment:
+            DATABASE_HOST: localhost
+            DATABASE_PORT: 3306
+            DATABASE_NAME: integration
+            DATABASE_USER: root
+            DATABASE_PASSWORD: root
+        steps:
+            - checkout
+            - run: composer self-update
+            - run: composer install
+            - deploy:
+                command: |
+                      if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                        bundle exec cap production deploy --trace
+                      fi
