@@ -22,10 +22,13 @@ jobs:
             - checkout
             - restore_cache:
                 key: integration-{{ .Branch }}-{{ checksum "./ansible-requirements.yml" }}-v1
+            - run: ansible-galaxy install -r ansible/requirements.yml
             - save_cache:
                 key: integration-{{ .Branch }}-{{ checksum "./ansible/requirements.yml" }}-v1
                 paths:
                     - "./root/.ansible/roles"
+
+
             - run: echo $ANSIBLE_VAULT_PASS > ./ansible/.vault-pass.txt
             - run: ansible-playbook ansible/deploy.yml -i ansible/hosts.ini --vault-password-file=./ansible/.vault-pass.txt
             - run: rm ./ansible/.vault-pass.txt
