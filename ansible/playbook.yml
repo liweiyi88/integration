@@ -1,0 +1,72 @@
+---
+- hosts: escapestring
+
+  vars_files:
+    - ./vars/vars.yml
+
+  pre_tasks:
+    - name: Pre-install aptitude in ubuntu 16.04 for safe upgrade
+      become: true
+      apt:
+        name: aptitude
+
+    - name: Update APT package manager repositories cache
+      become: true
+      apt:
+        update_cache: yes
+
+    - name: Upgrade installed packages
+      become: true
+      apt:
+        upgrade: safe
+
+  roles:
+    - nginx
+    - php
+
+  tasks:
+    - name: Install tools
+      become: true
+      apt:
+        name: "{{ item }}"
+      with_items:
+        - zip
+        - unzip
+        - supervisor
+
+    - name: Create supervisord config file
+      become: true
+      template:
+        src: ./templates/supervisord.conf
+        dest: /etc/supervisor/conf.d/supervisord.conf
+
+    - name: Install GIT
+      become: true
+      apt:
+        name: git
+        state: latest
+
+    - name: Install Mysql
+      become: true
+      apt:
+        name: mysql-server-5.7
+
+    - name: Check for composer
+      stat:
+        path: /usr/local/bin/composer
+      register: composer_stat
+
+    - name: Download Composer
+      script: scripts/install_composer.sh
+      when: not composer_stat.stat.exists
+
+    - name: Move Composer globally
+      become: true
+      command: mv composer.phar /usr/local/bin/composer
+      when: not composer_stat.stat.exists
+
+    - name: Set permissions on Composer
+      become: true
+      file:
+        path: /usr/local/bin/composer
+        mode: "a+x"

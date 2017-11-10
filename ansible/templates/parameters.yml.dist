@@ -1,0 +1,35 @@
+# This file is a "template" of what your parameters.yml file should look like
+# Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
+# http://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
+parameters:
+    env(DATABASE_HOST): "{{ database_host }}"
+    env(DATABASE_PORT): 3306
+    env(DATABASE_SOCKET): null
+    env(DATABASE_NAME): integration
+    env(DATABASE_USER): "{{ database_user }}"
+    env(DATABASE_PASSWORD): "{{ database_password }}"
+    # You should uncomment this if you want use pdo_sqlite
+    # database_path: "%kernel.root_dir%/data.db3"
+
+    mailer_transport:  ~
+    mailer_host:       ~
+    mailer_user:       ~
+    mailer_password:   ~
+    mailer_port:       ~
+
+    # A secret key that's used to generate certain security-related tokens
+    secret:            ThisTokenIsNotSoSecretChangeIt
+
+    #AWS general parameters
+    aws_version: latest
+    aws_region: ap-southeast-2
+    aws_key: "{{ aws_key }}"
+    aws_secret: "{{ aws_secret }}"
+
+    #Twitter access
+    twitter_access_token: "{{ twitter_token }}"
+    twitter_access_token_secret: "{{ twitter_token_secret }}"
+    twitter_consumer_key: "{{ twitter_api_key }}"
+    twitter_consumer_secret: "{{ twitter_api_secret }}"
+
+    redis_dsn: redis://localhost:6379
