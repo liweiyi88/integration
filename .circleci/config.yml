@@ -29,9 +29,9 @@ jobs:
                     - "./root/.ansible/roles"
 
 
-            - run: echo $ANSIBLE_VAULT_PASS > ./integration/ansible/.vault-pass.txt
-            - run: ansible-playbook ansible/deploy.yml -i ansible/hosts.ini --vault-password-file=./integration/ansible/.vault-pass.txt
-            - run: rm ./integration/ansible/.vault-pass.txt
+            - run: echo $ANSIBLE_VAULT_PASS > ./ansible/.vault-pass.txt
+            - run: ansible-playbook ansible/deploy.yml -i ansible/hosts.ini --vault-password-file=./ansible/.vault-pass.txt
+            - run: rm ./ansible/.vault-pass.txt
 
 workflows:
     version: 2
