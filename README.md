@@ -4,6 +4,7 @@
 Purpose
 -------
 This project is to demonstrate the way to integrate application with third-party services by using asynchronous messaging (Background Worker & Message Queue).
+It also shows how to use ansible for provisioning and auto CI/CD pipeline by using CircleCI and Ansistrano.
 
 How does this project work?
 ------------------------
