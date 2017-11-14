@@ -20,8 +20,7 @@ class WorkerRestartCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $cacheFactory = $this->getContainer()->get(CacheFactory::class);
-        $cache = $cacheFactory->get($input->getOption('cache'));
+        $cache = CacheFactory::create($input->getOption('cache'));
         $lastRestartDateItem = $cache->getItem('last_restart_date');
         $cache->save($lastRestartDateItem->set(date('Y-m-d H:i:s')));
         $output->writeln('reset last restart date');
