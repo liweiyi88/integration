@@ -1,13 +1,17 @@
 <?php
 
-namespace AppBundle;
+namespace AppBundle\Queue\Worker;
 
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 class Worker
 {
-    /**@var AdapterInterface $cache **/
     private $cache;
+
+    public function __construct(AdapterInterface $cache)
+    {
+        $this->cache = $cache;
+    }
 
     public function memoryExceeded(int $memoryLimit): bool
     {
@@ -48,10 +52,5 @@ class Worker
         }
 
         throw new \Exception('Cache is required');
-    }
-
-    public function setCache(AdapterInterface $cache): void
-    {
-        $this->cache = $cache;
     }
 }

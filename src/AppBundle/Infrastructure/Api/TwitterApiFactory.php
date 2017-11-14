@@ -23,7 +23,7 @@ class TwitterApiFactory
         $this->accessTokenSecret = $accessTokenSecret;
     }
 
-    public function get()
+    public function create()
     {
         return new TwitterOAuth($this->consumerKey, $this->consumerSecret, $this->accessToken, $this->accessTokenSecret);
     }
