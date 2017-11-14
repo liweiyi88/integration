@@ -25,7 +25,6 @@ class SignUpTwitterWorkerCommand extends ContainerAwareCommand
     private $worker;
     /** @var  ObjectFactory $objectFactory **/
     private $objectFactory;
-    private $cacheFactory;
     /** @var  TwitterOAuth */
     private $twitterApi;
     /** @var  LoggerInterface $logger */
@@ -47,7 +46,6 @@ class SignUpTwitterWorkerCommand extends ContainerAwareCommand
         $this->sqs = $this->getContainer()->get(SQS::class);
         $this->sqs->setJob(new TwitterJob());
         $this->objectFactory = $this->getContainer()->get(ObjectFactory::class);
-        $this->cacheFactory = $this->getContainer()->get(CacheFactory::class);
         $this->twitterApi = $this->getContainer()->get(TwitterApiFactory::class)->create();
         $this->logger = $this->getContainer()->get('logger');
         $this->sleepSeconds = intval($input->getOption('sleep'));
@@ -58,6 +56,7 @@ class SignUpTwitterWorkerCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $lastRestart = $this->worker->getTimestampOfLastQueueRestart();
         while (true) {
             try {
                 $messages = $this->sqs->getMessages();
@@ -74,7 +73,7 @@ class SignUpTwitterWorkerCommand extends ContainerAwareCommand
                     $this->worker->sleep($this->sleepSeconds);
                 }
 
-                $this->worker->stopIfNecessary(intval($input->getOption('max_memory')));
+                $this->worker->stopIfNecessary(intval($input->getOption('max_memory')), $lastRestart);
             } catch (\Exception $e) {
                 $this->logger->error($e->getMessage());
             }

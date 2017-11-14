@@ -28,11 +28,11 @@ class Worker
         exit($status);
     }
 
-    public function stopIfNecessary(int $memoryLimit): void
+    public function stopIfNecessary(int $memoryLimit, string $lastRestart): void
     {
         if ($this->memoryExceeded($memoryLimit)) {
             $this->stop(12);
-        } elseif ($this->queueShouldRestart($this->getTimestampOfLastQueueRestart())) {
+        } elseif ($this->queueShouldRestart($lastRestart)) {
             $this->stop();
         }
     }
