@@ -56,8 +56,8 @@ class SignUpTwitterWorkerCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $lastRestart = $this->worker->getTimestampOfLastQueueRestart();
         while (true) {
-            $lastRestart = $this->worker->getTimestampOfLastQueueRestart();
             try {
                 $messages = $this->sqs->getMessages();
                 if (count($messages) > 0) {
