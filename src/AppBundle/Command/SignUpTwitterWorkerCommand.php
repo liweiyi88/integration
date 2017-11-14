@@ -2,13 +2,16 @@
 
 namespace AppBundle\Command;
 
+use Abraham\TwitterOAuth\TwitterOAuth;
 use AppBundle\Entity\SignUp;
 use AppBundle\Factory\CacheFactory;
 use AppBundle\Factory\ObjectFactory;
 use AppBundle\Infrastructure\Api\TwitterApiFactory;
 use AppBundle\Queue\Job\TwitterJob;
 use AppBundle\Queue\SQS;
-use AppBundle\Worker;
+use AppBundle\Queue\Worker\Worker;
+use AppBundle\Queue\Worker\WorkerFactory;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -16,6 +19,19 @@ use Symfony\Component\Console\Input\InputOption;
 
 class SignUpTwitterWorkerCommand extends ContainerAwareCommand
 {
+    /** @var SQS $sqs */
+    private $sqs;
+    /** @var  Worker $worker */
+    private $worker;
+    /** @var  ObjectFactory $objectFactory **/
+    private $objectFactory;
+    private $cacheFactory;
+    /** @var  TwitterOAuth */
+    private $twitterApi;
+    /** @var  LoggerInterface $logger */
+    private $logger;
+    private $sleepSeconds;
+
     protected function configure()
     {
         $this
@@ -26,40 +42,41 @@ class SignUpTwitterWorkerCommand extends ContainerAwareCommand
             ->setDescription('Process AWS SQS messages');
     }
 
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
+        $this->sqs = $this->getContainer()->get(SQS::class);
+        $this->sqs->setJob(new TwitterJob());
+        $this->objectFactory = $this->getContainer()->get(ObjectFactory::class);
+        $this->cacheFactory = $this->getContainer()->get(CacheFactory::class);
+        $this->twitterApi = $this->getContainer()->get(TwitterApiFactory::class)->create();
+        $this->logger = $this->getContainer()->get('logger');
+        $this->sleepSeconds = intval($input->getOption('sleep'));
+
+        $cache = CacheFactory::create($input->getOption('cache'));
+        $this->worker = WorkerFactory::create($cache);
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $sqs = $this->getContainer()->get(SQS::class);
-        $worker = $this->getContainer()->get(Worker::class);
-        $objectFactory = $this->getContainer()->get(ObjectFactory::class);
-        $cacheFactory = $this->getContainer()->get(CacheFactory::class);
-        $twitterApi = $this->getContainer()->get(TwitterApiFactory::class)->get();
-        $logger = $this->getContainer()->get('logger');
-
-        $sleepSeconds = intval($input->getOption('sleep'));
-
-        $cache = $cacheFactory->get($input->getOption('cache'));
-        $worker->setCache($cache);
-
-        $sqs->setJob(new TwitterJob());
         while (true) {
             try {
-                $messages = $sqs->getMessages();
+                $messages = $this->sqs->getMessages();
                 if (count($messages) > 0) {
                     foreach ($messages as $message) {
                         /**@var SignUp $signUp **/
-                        $signUp = $objectFactory->get($sqs->getRawBody($message));
+                        $signUp = $this->objectFactory->create($this->sqs->getRawBody($message));
                         $tweet = $signUp->getUsername().' has just submitted the application form!';
 
-                        $twitterApi->post('statuses/update', ['status' => $tweet]);
-                        $sqs->deleteMessage($message);
+                        $this->twitterApi->post('statuses/update', ['status' => $tweet]);
+                        $this->sqs->deleteMessage($message);
                     }
                 } else {
-                    $worker->sleep($sleepSeconds);
+                    $this->worker->sleep($this->sleepSeconds);
                 }
 
-                $worker->stopIfNecessary(intval($input->getOption('max_memory')));
+                $this->worker->stopIfNecessary(intval($input->getOption('max_memory')));
             } catch (\Exception $e) {
-                $logger->error($e->getMessage());
+                $this->logger->error($e->getMessage());
             }
         }
     }

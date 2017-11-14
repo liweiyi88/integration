@@ -13,7 +13,7 @@ class ObjectFactory
         $this->serializer = $serializer;
     }
 
-    public function get(string $message)
+    public function create(string $message)
     {
         $array = json_decode($message, true);
         return $this->serializer->deserialize($message, $array['class'], 'json');
