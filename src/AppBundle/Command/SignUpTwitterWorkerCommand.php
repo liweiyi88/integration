@@ -2,14 +2,16 @@
 
 namespace AppBundle\Command;
 
+use Abraham\TwitterOAuth\TwitterOAuth;
 use AppBundle\Entity\SignUp;
 use AppBundle\Factory\CacheFactory;
 use AppBundle\Factory\ObjectFactory;
 use AppBundle\Infrastructure\Api\TwitterApiFactory;
 use AppBundle\Queue\Job\TwitterJob;
 use AppBundle\Queue\SQS;
+use AppBundle\Queue\Worker\Worker;
 use AppBundle\Queue\Worker\WorkerFactory;
-use AppBundle\Worker;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,11 +19,16 @@ use Symfony\Component\Console\Input\InputOption;
 
 class SignUpTwitterWorkerCommand extends ContainerAwareCommand
 {
+    /** @var SQS $sqs */
     private $sqs;
+    /** @var  Worker $worker */
     private $worker;
+    /** @var  ObjectFactory $objectFactory **/
     private $objectFactory;
     private $cacheFactory;
+    /** @var  TwitterOAuth */
     private $twitterApi;
+    /** @var  LoggerInterface $logger */
     private $logger;
     private $sleepSeconds;
 
@@ -57,7 +64,7 @@ class SignUpTwitterWorkerCommand extends ContainerAwareCommand
                 if (count($messages) > 0) {
                     foreach ($messages as $message) {
                         /**@var SignUp $signUp **/
-                        $signUp = $this->objectFactory->get($this->sqs->getRawBody($message));
+                        $signUp = $this->objectFactory->create($this->sqs->getRawBody($message));
                         $tweet = $signUp->getUsername().' has just submitted the application form!';
 
                         $this->twitterApi->post('statuses/update', ['status' => $tweet]);
