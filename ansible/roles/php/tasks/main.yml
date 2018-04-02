@@ -10,19 +10,19 @@
     name: "{{ item }}"
     state: latest
   with_items:
-    - php7.1-cli
-    - php7.1-curl
-    - php7.1-fpm
-    - php7.1-intl
-    - php7.1-mysql
-    - php7.1-xml
+    - php7.2-cli
+    - php7.2-curl
+    - php7.2-fpm
+    - php7.2-intl
+    - php7.2-mysql
+    - php7.2-xml
   notify: Restart PHP-FPM
 
 
 - name: Set date.timezone for CLI
   become: true
   lineinfile:
-    dest: /etc/php/7.1/cli/php.ini
+    dest: /etc/php/7.2/cli/php.ini
     regexp: "date.timezone ="
     line: "date.timezone = UTC"
   notify: Restart PHP-FPM
@@ -30,7 +30,7 @@
 - name: Set date.timezone for FPM
   become: true
   lineinfile:
-    dest: /etc/php/7.1/fpm/php.ini
+    dest: /etc/php/7.2/fpm/php.ini
     regexp: "date.timezone ="
     line: "date.timezone = UTC"
   notify: Restart PHP-FPM
