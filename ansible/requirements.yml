@@ -1,2 +1,2 @@
-- src: carlosbuenosvinos.ansistrano-deploy
-  version: 2.7.0
+- src: ansistrano.deploy
+  version: 2.11.0
