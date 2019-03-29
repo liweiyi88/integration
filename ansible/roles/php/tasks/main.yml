@@ -18,6 +18,7 @@
     - php7.2-xml
     - php7.2-mbstring
     - php7.2-gd
+    - php7.2-zip
   notify: Restart PHP-FPM
 
 - name: Set date.timezone for CLI
